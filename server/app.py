@@ -21,8 +21,8 @@ def preprocess_data_students(df, skills_column, aimed_column):
     return df
 
 def load_data():
-    students = pd.read_csv(r'C:\\Users\\tanvi\\Desktop\\recask\\testApp\\backend\\students.csv')
-    mentors = pd.read_csv(r'C:\\Users\\tanvi\\Desktop\\recask\\testApp\\backend\\mentors.csv')
+    students = pd.read_csv('students.csv')
+    mentors = pd.read_csv('mentors.csv')
 
     students.reset_index(inplace=True)
     students.rename(columns={'index': 'id'}, inplace=True)
