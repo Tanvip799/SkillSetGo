@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 
 function Chatbot() {
   const [input, setInput] = useState("");
+  const [input1, setInput1] = useState("");
   const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -41,6 +42,8 @@ function Chatbot() {
       return;
     }
     setLoading(true);
+    setInput1(i => input);
+    setInput("");
     try {
       const response = await fetch("http://127.0.0.1:5000/chatbot", {
         method: "POST",
@@ -98,7 +101,7 @@ function Chatbot() {
                   <p>
                     <strong>You:</strong>{" "}
                   </p>
-                  {input}
+                  {input1}
                 </p>
               </div>
               <Spinner
