@@ -1,0 +1,118 @@
+import React from "react";
+import { Link, NavLink } from "react-router-dom";
+import Graduation from "../assets/graduation.png";
+import Book from "../assets/book-text.png";
+import Bot from "../assets/bot.png";
+import Calendar from "../assets/calendar.png";
+import Dashboard from "../assets/circle-gauge.png";
+import User from "../assets/circle-user.png";
+import Forum from "../assets/users.png";
+import Map from "../assets/map.png";
+
+function Nav() {
+  return (
+    <>
+      <nav className="w-[20%] flex flex-col justify-between items-start h-screen fixed left-0 bg-purple1 pl-8 pr-12 py-10">
+        <Link className="flex space-x-2 items-center">
+          <img src={Graduation} className="h-12 ml-[-0.2rem]" alt="" />
+          <div className="flex flex-col justify-center space-y-[-6px]">
+            <h1 className="text-xl font-semibold text-white font-mont tracking-widest">
+              SkillSetGo
+            </h1>
+            <p className="text-sm text-gray-400 tracking-tight">
+              Chart Your Future
+            </p>
+          </div>
+        </Link>
+
+        <div className="flex flex-col space-y-3">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
+              }`
+            }
+          >
+            <img className="h-5" src={Dashboard} alt="" />
+            <p className="text-sm font-pop">Dashboard</p>
+          </NavLink>
+
+          <NavLink
+            to="/roadmap"
+            className={({ isActive }) =>
+              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
+              }`
+            }
+          >
+            <img className="h-5" src={Map} alt="" />
+            <p className="text-sm font-pop">Roadmap</p>
+          </NavLink>
+
+          <NavLink
+            to="/courses"
+            className={({ isActive }) =>
+              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
+              }`
+            }
+          >
+            <img className="h-5" src={Book} alt="" />
+            <p className="text-sm font-pop">Courses</p>
+          </NavLink>
+
+          <NavLink
+            to="/calendar"
+            className={({ isActive }) =>
+              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
+              }`
+            }
+          >
+            <img className="h-5" src={Calendar} alt="" />
+            <p className="text-sm font-pop">Calendar</p>
+          </NavLink>
+
+          <NavLink
+            to="/forum"
+            className={({ isActive }) =>
+              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
+              }`
+            }
+          >
+            <img className="h-5" src={Forum} alt="" />
+            <p className="text-sm font-pop">Forum</p>
+          </NavLink>
+
+          <NavLink
+            to="/chatbot"
+            className={({ isActive }) =>
+              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
+              }`
+            }
+          >
+            <img className="h-5" src={Bot} alt="" />
+            <p className="text-sm font-pop">Chatbot</p>
+          </NavLink>
+        </div>
+
+        <NavLink
+          to="/account"
+          className={({ isActive }) =>
+            `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              isActive ? "bg-gray-700" : "hover:bg-gray-700"
+            }`
+          }
+        >
+          <img className="h-5" src={User} alt="" />
+          <p className="text-sm font-pop">Account</p>
+        </NavLink>
+      </nav>
+    </>
+  );
+}
+
+export default Nav;
