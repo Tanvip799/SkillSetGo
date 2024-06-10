@@ -8,7 +8,7 @@ import { Chip } from "@nextui-org/react";
 export const EmblaCarousel = () => {
   return (
     <>
-      <div>
+      <div className="w-[100%]">
         <div className="flex space-x-2">
           <h1 className="text-purple1 font-bold text-xl mb-1 font-mont">
             Courses
@@ -23,36 +23,36 @@ export const EmblaCarousel = () => {
             </Chip>
           </Link>
         </div>
-        <div className="courses w-[37rem] h-[19rem] flex justify-between items-center">
+        <div className="courses h-[19rem] flex justify-between space-x-5 items-center">
           <Link
             to=""
-            className="w-[18rem] p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
+            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
           >
             <img
               src={ReactLogo}
               className="object-cover h-[12rem] rounded-lg"
               alt=""
             />
-            <p className="font-semibold font-mont text-lg">
+            <p className="font-semibold font-mont text-lg text-black">
               React Complete Course
             </p>
-            Progress:
+            <p className="text-black">Progress:</p>
             <Progress color="default" aria-label="Loading..." value={60} />
           </Link>
 
           <Link
             to=""
-            className="w-[18rem] p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
+            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
           >
             <img
               src={mlLogo}
               className="object-cover h-[12rem] rounded-lg"
               alt=""
             />
-            <p className="font-semibold font-mont text-lg">
+            <p className="font-semibold font-mont text-lg text-black">
               Machine Learning Course
             </p>
-            Progress:
+            <p className="text-black">Progress:</p>
             <Progress color="warning" aria-label="Loading..." value={20} />
           </Link>
         </div>

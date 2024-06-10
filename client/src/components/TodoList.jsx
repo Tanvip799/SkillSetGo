@@ -30,11 +30,11 @@ const ToDoList = () => {
   };
 
   return (
-    <div>
+    <div className="w-[100%]">
       <h1 className="text-xl text-purple1 font-bold font-mont mb-1">
         Todo List
       </h1>
-      <div className="bg-white shadow-lg rounded-lg p-6 w-[20rem] max-w-md mx-auto overflow-auto h-[42rem]">
+      <div className="bg-white shadow-lg rounded-lg p-6 mx-auto overflow-auto h-[42rem]">
         {Object.keys(tasks).map((category) => (
           <div key={category} className="mb-6">
             <h2 className="text-lg font-semibold text-white bg-slate-400 p-2 rounded">
@@ -62,7 +62,7 @@ const ToDoList = () => {
                 onChange={(e) =>
                   setNewTask({ ...newTask, [category]: e.target.value })
                 }
-                className="flex-grow p-2 border rounded-l-md"
+                className="flex-grow p-2 border border-gray-400 rounded-l-md bg-white"
               />
               <button
                 onClick={() => handleAddTask(category)}

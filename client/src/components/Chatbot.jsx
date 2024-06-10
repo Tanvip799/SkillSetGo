@@ -113,7 +113,7 @@ function Chatbot() {
         <div className="fixed bottom-0 w-[100%] pb-4 shadow-lg">
           <div className="flex items-center space-x-2">
             <input
-              className="rounded-lg w-[54%] p-2 border border-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+              className="rounded-lg w-[54%] bg-white p-2 border border-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
               value={input}
               onChange={handleInput}
               type="text"

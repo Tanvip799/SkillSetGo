@@ -48,10 +48,10 @@ function PomodoroTimer() {
 
   return (
     <>
-      <div>
+      <div className="w-[100%]">
         <h1 className="text-xl text-purple1 font-bold font-mont mb-1">Timer</h1>
         <div
-          className="pomodoro-timer flex flex-col items-center justify-center p-6 pt-7 bg-cover bg-center rounded-lg shadow-lg text-white w-[18rem] h-[19rem]"
+          className="pomodoro-timer flex flex-col items-center justify-center p-6 pt-7 bg-cover bg-center rounded-lg shadow-lg text-white h-[19rem]"
           style={{ backgroundImage: `url(${backgroundImage})` }}
         >
           <div className="time-display text-5xl font-mont font-bold mb-6">

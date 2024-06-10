@@ -16,7 +16,7 @@ const router = createBrowserRouter(
     <Route path='/' element={<Layout/>}>
       <Route path='' element={<Home/>}/>
       <Route path='chatbot' element={<Chatbot/>}/>
-      <Route path='calendar' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem"}}><CalendarComponent/></div>}/>
+      <Route path='calendar' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><CalendarComponent/></div>}/>
       <Route path='about' element={<About/>}/>
     </Route>
   )
