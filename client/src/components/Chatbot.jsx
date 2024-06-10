@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Input, Button, Spinner } from "@nextui-org/react";
+import { Textarea, Button, Spinner } from "@nextui-org/react";
 import ReactMarkdown from "react-markdown";
 
 function Chatbot() {
   const [input, setInput] = useState("");
+  const [input1, setInput1] = useState("");
   const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -41,6 +42,8 @@ function Chatbot() {
       return;
     }
     setLoading(true);
+    setInput1(i => input);
+    setInput("");
     try {
       const response = await fetch("http://127.0.0.1:5000/chatbot", {
         method: "POST",
@@ -73,8 +76,8 @@ function Chatbot() {
 
   return (
     <>
-      <div className="min-h-screen w-[80%] ml-[20%] pt-6 px-16 bg-gray-50 flex flex-col relative">
-        <h1 className="text-2xl font-bold self-center">Ask Your Doubts</h1>
+      <div className="min-h-screen w-[80%] ml-[20%] pt-6 px-14 bg-gray-100 flex flex-col relative">
+        <h1 className="text-purple1 text-2xl font-bold self-center">Ask Your Doubts</h1>
         <div className="flex flex-col mt-4 mb-24 p-2 overflow-auto">
           {history.map((item, index) => (
             <div
@@ -98,7 +101,7 @@ function Chatbot() {
                   <p>
                     <strong>You:</strong>{" "}
                   </p>
-                  {input}
+                  {input1}
                 </p>
               </div>
               <Spinner
@@ -111,9 +114,11 @@ function Chatbot() {
           <div ref={bottomRef}></div>
         </div>
         <div className="fixed bottom-0 w-[100%] pb-4 shadow-lg">
-          <div className="flex items-center space-x-2">
-            <input
-              className="rounded-lg w-[54%] bg-white p-2 border border-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+          <div className="flex items-end space-x-2">
+            <Textarea
+              minRows={1}
+              maxRows={10}
+              className="prompt rounded-lg w-[54%] text-black h bg-white border border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
               value={input}
               onChange={handleInput}
               type="text"

@@ -12,7 +12,7 @@ import Map from "../assets/map.png";
 function Nav() {
   return (
     <>
-      <nav className="w-[20%] flex flex-col justify-between items-start h-screen fixed left-0 bg-purple1 pl-8 pr-12 py-10">
+      <nav className="w-[20%] flex flex-col justify-between items-center h-screen fixed left-0 bg-purple1 py-10">
         <Link className="flex space-x-2 items-center">
           <img src={Graduation} className="h-12 ml-[-0.2rem]" alt="" />
           <div className="flex flex-col justify-center space-y-[-6px]">
@@ -25,11 +25,11 @@ function Nav() {
           </div>
         </Link>
 
-        <div className="flex flex-col space-y-3">
+        <div className="flex flex-col items-center space-y-3 w-[100%]">
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
@@ -41,7 +41,7 @@ function Nav() {
           <NavLink
             to="/roadmap"
             className={({ isActive }) =>
-              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
@@ -53,7 +53,7 @@ function Nav() {
           <NavLink
             to="/courses"
             className={({ isActive }) =>
-              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
@@ -65,7 +65,7 @@ function Nav() {
           <NavLink
             to="/calendar"
             className={({ isActive }) =>
-              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
@@ -89,7 +89,7 @@ function Nav() {
           <NavLink
             to="/forum"
             className={({ isActive }) =>
-              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
@@ -103,7 +103,7 @@ function Nav() {
           <NavLink
             to="/chatbot"
             className={({ isActive }) =>
-              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
@@ -116,7 +116,7 @@ function Nav() {
         <NavLink
           to="/account"
           className={({ isActive }) =>
-            `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+            `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
               isActive ? "bg-gray-700" : "hover:bg-gray-700"
             }`
           }
