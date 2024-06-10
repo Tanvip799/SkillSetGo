@@ -77,12 +77,12 @@ function Nav() {
           <NavLink
             to="/mentorship"
             className={({ isActive }) =>
-              `text-white flex space-x-4 p-2 w-[12rem] rounded-lg justify-start items-center transition duration-100 ${
+              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
-            <img className="h-5" src={Map} alt="" />
+            <img className="h-5" src={Calendar} alt="" />
             <p className="text-sm font-pop">Mentorship</p>
           </NavLink>
 
