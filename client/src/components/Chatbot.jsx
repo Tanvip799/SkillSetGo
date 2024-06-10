@@ -76,7 +76,7 @@ function Chatbot() {
 
   return (
     <>
-      <div className="min-h-screen w-[80%] ml-[20%] pt-6 px-14 bg-gray-50 flex flex-col relative">
+      <div className="min-h-screen w-[80%] ml-[20%] pt-6 px-14 bg-gray-100 flex flex-col relative">
         <h1 className="text-purple1 text-2xl font-bold self-center">Ask Your Doubts</h1>
         <div className="flex flex-col mt-4 mb-24 p-2 overflow-auto">
           {history.map((item, index) => (
