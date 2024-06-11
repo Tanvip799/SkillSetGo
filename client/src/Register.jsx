@@ -24,7 +24,7 @@ const Register = () => {
       });
       setMessage(response.data.message);
       if (response.data.success) {
-        navigate('/');
+        navigate('/login');
       }
     } catch (error) {
       setMessage("Registration failed. Please try again.");
