@@ -43,7 +43,7 @@ def calculate_similarity_matrices(students, mentors):
     cosine_similarities = linear_kernel(student_features_matrix, mentor_features_matrix)
     return cosine_similarities
 
-def recommend_mentors_for_student(student_id, students, mentors, cosine_similarities, top_n=4):
+def recommend_mentors_for_student(student_id, students, mentors, cosine_similarities, top_n=8):
     student_index = students[students['id'] == student_id].index[0]
     similarity_scores = list(enumerate(cosine_similarities[student_index]))
     similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
