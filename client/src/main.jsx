@@ -9,16 +9,22 @@ import About from './components/About.jsx'
 import {divider, NextUIProvider} from '@nextui-org/react'
 import Chatbot from './components/Chatbot.jsx'
 import CalendarComponent from './components/Calendar.jsx'
+import Register from './Register.jsx'
+import Login from './Login.jsx'
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
+    <>
+    <Route path='/login' element={<Login/>}/> 
+    <Route path='/register' element={<Register/>}/>
     <Route path='/' element={<Layout/>}>
       <Route path='' element={<Home/>}/>
       <Route path='chatbot' element={<Chatbot/>}/>
       <Route path='calendar' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><CalendarComponent/></div>}/>
       <Route path='about' element={<About/>}/>
     </Route>
+    </>
   )
 )
 
