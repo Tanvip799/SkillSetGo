@@ -23,7 +23,7 @@ const Register = () => {
         password: password,
       });
       setMessage(response.data.message);
-      if (response.data.success) {
+      if (response.data.message == 'User registered successfully') {
         navigate('/login');
       }
     } catch (error) {
