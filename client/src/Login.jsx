@@ -18,10 +18,7 @@ const Login = () => {
       return;
     }
     try {
-      const response = await axios.post("http://127.0.0.1:5000/login", {
-        email: email,
-        password: password,
-      });
+      const response = await axios.get(`http://127.0.0.1:5000/login/${email}/${password}`);
       setMessage(response.data.message);
       if (response.data.message === "User logged in successfully") {
         localStorage.setItem("user_creds", JSON.stringify(response.data.creds));
