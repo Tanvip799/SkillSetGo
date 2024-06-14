@@ -10,7 +10,7 @@ import {divider, NextUIProvider} from '@nextui-org/react'
 import Chatbot from './components/Chatbot.jsx'
 import CalendarComponent from './components/Calendar.jsx'
 import Mentorship from './components/mentorship.jsx'
-
+import MentorDetail from './components/MentorDetails.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
@@ -19,6 +19,7 @@ const router = createBrowserRouter(
       <Route path='calendar' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><CalendarComponent/></div>}/>
       <Route path='about' element={<About/>}/>
       <Route path='mentorship' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><Mentorship/></div>}/>
+      <Route path="/mentor/:id" element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><MentorDetail/></div>}/>
     </Route>
   )
 )

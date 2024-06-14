@@ -22,7 +22,7 @@ def preprocess_data_students(df, skills_column, aimed_column):
 
 def load_data():
     students = pd.read_csv('students.csv')
-    mentors = pd.read_csv('mentors.csv')
+    mentors = pd.read_csv('mentors_with_id.csv')
 
     students.reset_index(inplace=True)
     students.rename(columns={'index': 'id'}, inplace=True)
@@ -63,7 +63,7 @@ generation_config = {
 
 @app.route('/mentorship',methods=['GET'])
 def mentor():
-    student_id = 11
+    student_id = 12
     # Load data
     students, mentors = load_data()
     # Calculate cosine similarities
@@ -88,6 +88,15 @@ def chatbot():
     response = chat_session.send_message(prefix+msg)
     text = response.text
     return text
+mentors_df = pd.read_csv('mentors_with_id.csv')
 
+@app.route('/mentors/<int:mentor_id>')
+def get_mentor(mentor_id):
+    mentor = mentors_df[mentors_df['id'] == mentor_id].to_dict(orient='records')
+    print(mentor)
+    if mentor:
+        return jsonify(mentor[0]) 
+    else:
+        return jsonify({'error': 'Mentor not found'}), 404
 if __name__ == '__main__':
     app.run(debug=True)
