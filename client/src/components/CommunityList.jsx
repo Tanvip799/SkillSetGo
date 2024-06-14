@@ -94,7 +94,7 @@ function CommunityList() {
           No communities joined yet!
         </span>
       )}
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-3 gap-5 2xl:grid-cols-4 2xl:gap-3">
         {memberCommunities.map((community, index) => (
           <Card
             isFooterBlurred
@@ -201,6 +201,7 @@ function CommunityList() {
                     onChange={(e) => setDescription(e.target.value)}
                     type="text"
                     placeholder="Ask a question"
+                    required
                   />
                 </div>
               </ModalBody>
