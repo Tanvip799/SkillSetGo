@@ -82,13 +82,12 @@ def register():
         'message': 'User registered successfully'
     }), 200
     
-@app.route('/login', methods=['GET'])
-def login():
-    data = request.json
+@app.route('/login/<string:email>/<string:password>', methods=['GET'])
+def login(email, password):
     users = db.users
     user = users.find_one({
-        'email': data['email'],
-        'password': data['password']
+        'email': email,
+        'password': password
     })
     if user:
         return jsonify({
