@@ -110,12 +110,12 @@ const MentorRecommendations = () => {
       <h2 className="text-2xl font-bold my-8 mx-10"></h2>
       <div className="relative">
         {/* Mentor Cards and Navigation Buttons */}
-        <div className="flex flex-row flex-wrap justify-center gap-4 overflow-x-auto">
+        <div className="grid grid-cols-3 gap-5 2xl:grid-cols-4 2xl:gap-3">
           {/* Mentor Cards */}
           {mentors.slice(currentIndex, currentIndex + 4).map((mentor, index) => (
-            <div key={index} className="bg-white border rounded-lg shadow-md w-60">
+            <div key={index} className="bg-white border rounded-lg shadow-md w-full">
               <img
-                src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7SieSDnaZtBEq5mYqs-QZEOMuiED6aC6X0Q&s'
+                src='https://cdn-9.motorsport.com/images/mgl/63vnZMbY/s8/carlos-sainz-ferrari.jpg'
                 alt={mentor.name}
                 className="w-full h-40 object-cover rounded-t-lg"
               />
