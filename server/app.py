@@ -218,7 +218,7 @@ def create_reply():
 
 @app.route('/mentorship',methods=['GET'])
 def mentor():
-    student_id = 11
+    student_id = 12
     # Load data
     students, mentors = load_data()
     # Calculate cosine similarities
@@ -253,6 +253,8 @@ def chatbot():
     response = chat_session.send_message(prefix+msg)
     text = response.text
     return text
+mentors_df = pd.read_csv('mentors_with_id.csv')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
