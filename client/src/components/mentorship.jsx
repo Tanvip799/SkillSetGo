@@ -122,7 +122,7 @@ const MentorRecommendations = () => {
             {mentors
               .slice(currentIndex, currentIndex + 4)
               .map((mentor, index) => (
-                <div key={index} className="bg-white border rounded-lg shadow-md">
+                <div key={index} className="bg-white border rounded-lg shadow-md hover:scale-105 transition-all">
                   <img
                     src="https://www.shutterstock.com/image-photo/head-shot-handsome-millennial-30s-600nw-1854710668.jpg"
                     alt={mentor.name}
@@ -149,7 +149,7 @@ const MentorRecommendations = () => {
                     <div className="flex items-center mt-0 2xl:mt-2 gap-8">
                       {renderStars(mentor.average_rating)}
                       <Link to={`/mentorship/${mentor.id}`}>
-                        <button className="ml-auto bg-purple1 text-white p-1 2xl:py-1 2xl:px-3 rounded">
+                        <button className="text-sm 2xl:text-md ml-auto bg-purple1 text-white p-1 2xl:py-1 2xl:px-3 rounded">
                           Read more
                         </button>
                       </Link>

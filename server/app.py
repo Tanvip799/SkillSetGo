@@ -300,6 +300,15 @@ def get_mentor(mentor_id):
         return jsonify(mentor[0]) 
     else:
         return jsonify({'error': 'Mentor not found'}), 404
+    
+@app.route('/assign_mentor', methods=['POST'])
+def assign_mentor():
+    data = request.json
+    mentors = db.mentors
+    mentors.insert_one(data['mentorDetails'])
+    return jsonify({
+        'message': 'Mentor assigned successfully'
+    }), 200
 
 @app.route('/chatbot', methods=['POST'])
 def chatbot():

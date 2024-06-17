@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const MentorDetail = () => {
@@ -7,6 +7,23 @@ const MentorDetail = () => {
   const [mentor, setMentor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleAssignMentor = async (e) => {
+    e.preventDefault();
+    const userId = JSON.parse(localStorage.getItem("user_creds"))._id
+    mentor.studentId = userId;
+    try {
+      const response = await axios.post(`http://127.0.0.1:5000/assign_mentor`, {       
+        mentorDetails: mentor,
+      });
+      if (response.status === 200) {
+        navigate("/");
+      }
+    } catch (err) {
+      alert("Error assigning mentor");
+    }
+  };
 
   useEffect(() => {
     const fetchMentor = async () => {
@@ -96,11 +113,8 @@ const MentorDetail = () => {
             </span>
           </div>
           <div className="flex mt-4 space-x-4">
-            <button className="text-purple1 border border-purple1 px-4 py-2 rounded-full">
+            <button onClick={e=>handleAssignMentor(e)} className="text-white bg-purple1 px-4 py-2 rounded-full hover:bg-purple-900 transition-all">
               Book mentor
-            </button>
-            <button className="text-white bg-purple1 px-4 py-2 rounded-full">
-              Contact
             </button>
           </div>
           <hr className="my-8 border-t border-gray-300" />
