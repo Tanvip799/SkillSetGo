@@ -52,7 +52,7 @@ function Questions() {
     }
 
     const response = await axios.post(
-      "http://127.0.0.1:5000/inset_user_data",
+      "http://127.0.0.1:5000/get_roadmap",
       {
         userId: JSON.parse(localStorage.getItem("user_creds"))._id,
         currentYear: questions.currentYear,
@@ -73,6 +73,8 @@ function Questions() {
         prefStudyTimeTo: prefStudyTimeTo.toString(),
       }
     );
+    console.log(response.data.response);
+    console.log(typeof response.data.response);
   };
 
   return (
@@ -350,7 +352,7 @@ function Questions() {
                 onChange={(e) =>
                   setQuestions((q) => ({ ...q, studyDuration: e.target.value }))
                 }
-                placeholder="Duration in hours for each study session"
+                placeholder="Duration in hours for each study session in hours"
                 className="w-full mt-1 py-2 px-3 border-2 bg-white border-gray-200 rounded-xl shadow-sm hover:border-gray-400 focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
               />
             </div>

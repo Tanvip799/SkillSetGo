@@ -6,6 +6,7 @@ import pandas as pd
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 from bson.json_util import loads
+import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from flask_cors import CORS
@@ -82,9 +83,12 @@ def register():
         'message': 'User registered successfully'
     }), 200
     
-@app.route('/login/<string:email>/<string:password>', methods=['GET'])
-def login(email, password):
+@app.route('/login', methods=['POST'])
+def login():
     users = db.users
+    data = request.json
+    email = data['email']
+    password = data['password']
     user = users.find_one({
         'email': email,
         'password': password
@@ -100,15 +104,15 @@ def login(email, password):
         }), 200
     return jsonify({'message': 'Invalid credentials'}), 403
 
-@app.route('/inset_user_data', methods=['POST'])
-def insert_user_data():
-    data = request.json
-    userId = data['userId']
-    userData = db.userData
-    userData.insert_one(data)
-    return jsonify({
-        'message': 'User data inserted successfully'
-    }), 200
+# @app.route('/inset_user_data', methods=['POST'])
+# def insert_user_data():
+#     data = request.json
+#     userId = data['userId']
+#     userData = db.userData
+#     userData.insert_one(data)
+#     return jsonify({
+#         'message': 'User data inserted successfully'
+#     }), 200
 
 @app.route('/community_list/<string:userId>', methods=['GET'])
 def get_community(userId):
@@ -319,10 +323,106 @@ def chatbot():
     
     chat_session = model.start_chat(history=request.json['history'])
     msg = request.json['message']
-    prefix = ''
-    response = chat_session.send_message(prefix+msg)
+    response = chat_session.send_message(msg)
     text = response.text
     return text
+
+@app.route('/get_roadmap', methods=['POST'])
+def get_roadmap():
+    data = request.json
+    roadmaps = db.roadmaps
+    userData = db.userData
+    userData.insert_one(data)
+    model = genai.GenerativeModel(
+    model_name="gemini-1.5-pro",
+    generation_config=generation_config,
+    )
+    chat_session = model.start_chat(history=[])
+    prompt = f"""
+        User Inputs:
+
+        Current Year of Engineering: {data['currentYear']}
+        Desired Job Role: {data['jobRole']}
+        Preferred Industry: {data['industry']}
+        Technology Interests: {data['techInterests']}
+        Career Aspirations: {data['aspirations']}
+        Academic Background:
+        Field of study: {data['curFieldOfStudy']}
+        GPA: {data['gpa']}
+        Academic achievements: {data['achievements']}
+        Coursework:
+        Relevant courses: {data['coursework']}
+        Projects: {data['projects']}
+        Time of Campus Placement: {data['placementTime']}
+        Brief Description of Previous Experience and Knowledge: {data['prevExperience']}
+        Frequency of Study Sessions: {data['studyFrequency']}
+        Length of Each Study Session: {data['studyDuration']}
+        Roadmap Design Structure:
+        This roadmap is for an Indian student studying in an Indian engineering college. The roadmap generated should also take into consideration the other inputs provided by the user. Say, for example, the user has entered Finance as their preferred industry; then there should be a module dedicated to the application of the job role in that industry and how the learned modules are important in that field. Another example would be if the user entered their career aspirations as MNC, then the Interview prep module should be according to the interview setting of an MNC. Similarly, other input parameters of the user should also be considered.
+        
+        Next, the entered description of their previous experience should be analyzed, and all the topics that the user already knows but are to be included in the roadmap should be given less emphasis on, and the allotted time should be adjusted accordingly. It is crucial that every module will end with a project which would be a real-life application of all the subtopics covered in the entire module. It is also important that the last milestone/module of the roadmap would be the interview prep module, which would include important interview questions subtopics and everything relevant to the interview prep for the desired job role according to the Indian job placement environment.
+        
+        Now, each module will be designated a time, like it could be one week or two weeks, and this should be based on the subtopics in the module. It should take into account the frequency of the study sessions and the length of each study session entered by the user and then accordingly calculate a suitable time in weeks for each module. The last important thing is that the roadmap's total time should be such that it aligns with the campus placement time. It should be completed before the month of campus placement and should provide the user enough time to prepare for their placement. The time assigned to each module should be such that the total aligns with the time of campus placement starting from the day of the roadmap generation.
+        
+        JSON Format:
+        The output should strictly be in JSON format(no additional text required) with the following structure, ensuring consistency across all outputs:
+        
+        {{
+          "roadmap": [
+            {{
+              "module": "Module Name",
+              "subtopics": [
+                {{
+                  "subtopic": "Subtopic1",
+                  "difficulty_level": 1-10
+                }},
+                {{
+                  "subtopic": "Subtopic2",
+                  "difficulty_level": 1-10
+                }}
+                ...
+              ],
+              "project": "Project Description",
+              "duration_weeks": Number of Weeks
+            }}
+            ...
+          ],
+          "total_duration_weeks": Total Duration in Weeks,
+          "completion_date": "Completion Date"
+        }}
+        Additional Notes:
+        
+        Ensure each module is specific and well-divided, avoiding overly broad or generic coverage.
+        Take into account the user's previous experience and knowledge, giving less emphasis on topics the user is already familiar with.
+        Align the total duration of the roadmap with the time of campus placement, ensuring the user is fully prepared by the start of the placement season.
+        Another important thing to take care of is that the projects that you provide at the end of each module should not be generic like build a simple app or build a simple website etc. Instead, give the user a specific project like analyze the given dataset and train so-and-so model, build a calculator app with a UI description that you will give, or a proper case study of a company for EDA and model development etc.
+        Your task is to generate a personalized roadmap for the user based on the provided inputs. The roadmap structure and modules should be according to the given roadmap structure design. The final output should be in the given JSON format and should only contain the JSON object and nothing else.
+    """
+    
+    response = chat_session.send_message(prompt)
+    try:
+        # Remove the "```json" and "```" markers from the response text
+        cleaned_response_text = response.text.strip().strip("```json").strip("```")
+        
+        # Parse the cleaned response text to a JSON object
+        roadmap_json = json.loads(cleaned_response_text)
+        
+        # Insert the JSON object into the 'roadmaps' collection
+        roadmaps.insert_one({'userId': data['userId'], 'roadmap': roadmap_json})
+        
+        return jsonify({'response': roadmap_json, 'message': 'Roadmap generated and stored successfully'}), 200
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Failed to decode JSON from response'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/get_roadmap/<string:user_id>', methods=['GET'])
+def get_roadmap_data(user_id):
+    roadmaps = db.roadmaps
+    roadmap = roadmaps.find_one({'userId': user_id})
+    if roadmap:
+        return jsonify({'roadmap': roadmap['roadmap']}), 200
+    return jsonify({'message': 'No roadmap found'}), 404
 
 @app.route('/get_todo_list/<string:user_id>',methods = ['GET'])
 def get_todo(user_id):
