@@ -9,12 +9,10 @@ from bson.json_util import loads
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit, join_room, leave_room
 
 app = Flask(__name__)
 app.secret_key = 'sk'
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*") 
 
 connection_string = 'mongodb+srv://shriharimahabal2:NObO44F5chwSglW7@cluster0.c0f3mdd.mongodb.net/'
 client = MongoClient(connection_string)
@@ -220,20 +218,9 @@ def answer_doubt():
     }
     comments = db.comments
     comments.insert_one(comment)
-    socketio.emit('new_reply', {'comment': comment}, room=data['parentId'])
     return jsonify({
         'message': 'Comment created successfully'
     }), 200
-
-@socketio.on('connect')
-def handle_connect():
-    print('Client connected')
-    # Handle connection logic if needed
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    print('Client disconnected')
-    # Handle disconnection logic if needed
 
 
 @app.route('/get_responses/<string:comment_id>/<string:user_id>', methods=['GET'])
