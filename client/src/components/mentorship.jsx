@@ -3,7 +3,6 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import tick from "../assets/tick.png";
 import { Link } from "react-router-dom";
-import { Rings } from "react-loader-spinner"; 
 const mentorReasons = [
   "Expertise in the field",
   "Proven track record of success",
@@ -80,23 +79,22 @@ const MentorRecommendations = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="w-full max-w-6xl mx-auto bg-white p-6">
+    <div className="w-full max-w-6xl mx-auto bg-white p-6 py-0">
       <div className="grid grid-cols-3 gap-8">
         {/* First Column */}
         <div className="col-span-1">
-          <h2 className="text-4xl font-bold mb-8 text-purple1">
-            1-on-1 <h2 className="text-purple1">Career</h2> Mentorship
+          <h2 className="text-2xl 2xl:text-4xl font-bold mb-8 text-purple1">
+            1-on-1 Career Mentorship
           </h2>
         </div>
 
         {/* Second Column */}
-        {/* Second Column */}
         <div className="col-span-1 mt-4">
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             {mentorReasons.map((reason, index) => (
               <li key={index} className="flex items-center">
                 <img src={tick} alt="tick" className="w-5 h-5 mr-3" />
-                <span className="text-lg text-black">{reason}</span>
+                <span className="text-sm 2xl:text-lg text-black">{reason}</span>
               </li>
             ))}
           </ul>
@@ -104,11 +102,11 @@ const MentorRecommendations = () => {
 
         {/* Third Column */}
         <div className="col-span-1 mt-4">
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             {mentorReasons1.map((reason, index) => (
               <li key={index} className="flex items-center">
                 <img src={tick} alt="tick" className="w-5 h-5 mr-3" />
-                <span className="text-lg text-black">{reason}</span>
+                <span className="text-sm 2xl:text-lg text-black">{reason}</span>
               </li>
             ))}
           </ul>
@@ -130,7 +128,7 @@ const MentorRecommendations = () => {
             {mentors
               .slice(currentIndex, currentIndex + 4)
               .map((mentor, index) => (
-                <div key={index} className="bg-white border rounded-lg shadow-md">
+                <div key={index} className="bg-white border rounded-lg shadow-md hover:scale-105 transition-all">
                   <img
                     src="https://www.shutterstock.com/image-photo/head-shot-handsome-millennial-30s-600nw-1854710668.jpg"
                     alt={mentor.name}
@@ -144,20 +142,20 @@ const MentorRecommendations = () => {
                       {mentor.current_position}
                     </p>
                     <p className="text-gray-500">{mentor.current_employer}</p>
-                    <hr className="my-4 border-gray-300" />
+                    <hr className="my-2 2xl:my-4 border-gray-300" />
                     <p className="text-gray-600">
                       Work Experience: {mentor.work_experience}
                     </p>
                     <p className="text-gray-600">{mentor.field_of_expertise}</p>
-                    <div className="flex items-center mt-2">
+                    <div className="flex items-center mt-0 2xl:mt-2">
                       <p className="text-gray-700 font-bold text-md">
                         {mentor.average_rating}
                       </p>
                     </div>
-                    <div className="flex items-center mt-2 gap-8">
+                    <div className="flex items-center mt-0 2xl:mt-2 gap-8">
                       {renderStars(mentor.average_rating)}
                       <Link to={`/mentorship/${mentor.id}`}>
-                        <button className="ml-auto bg-purple1 text-white py-1 px-3 rounded">
+                        <button className="text-sm 2xl:text-md ml-auto bg-purple1 text-white p-1 2xl:py-1 2xl:px-3 rounded">
                           Read more
                         </button>
                       </Link>
@@ -170,7 +168,7 @@ const MentorRecommendations = () => {
 
         {/* Navigation Buttons */}
         <button
-          className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500 mr-10"
+          className="absolute top-1/2 left-[-2.3rem] 2xl:left-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500 mr-10"
           onClick={handlePrevious}
         >
           <svg
@@ -189,7 +187,7 @@ const MentorRecommendations = () => {
           </svg>
         </button>
         <button
-          className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500 ml-10"
+          className="absolute top-1/2 right-[-2.3rem] 2xl:right-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500 ml-10"
           onClick={handleNext}
         >
           <svg

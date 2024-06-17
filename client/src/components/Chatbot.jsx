@@ -42,7 +42,7 @@ function Chatbot() {
       return;
     }
     setLoading(true);
-    setInput1(i => input);
+    setInput1((i) => input);
     setInput("");
     try {
       const response = await fetch("http://127.0.0.1:5000/chatbot", {
@@ -77,7 +77,9 @@ function Chatbot() {
   return (
     <>
       <div className="min-h-screen w-[80%] ml-[20%] pt-6 px-14 bg-gray-100 flex flex-col relative">
-        <h1 className="text-purple1 text-2xl font-bold self-center">Ask Your Doubts</h1>
+        <h1 className="text-purple1 text-2xl font-bold self-center">
+          Ask Your Doubts
+        </h1>
         <div className="flex flex-col mt-4 mb-24 p-2 overflow-auto">
           {history.map((item, index) => (
             <div
@@ -88,21 +90,38 @@ function Chatbot() {
                   : "bg-gray-200 text-gray-900 self-start mb-10"
               }`}
             >
-              <p>
-                <strong>{item.role === "user" ? "You" : "AI"}:</strong>{" "}
-                <ReactMarkdown>{item.parts}</ReactMarkdown>
-              </p>
+              {item.role === "user" && (
+                <pre
+                  style={{
+                    fontFamily: "Roboto, sans-serif",
+                    fontWeight: "400",
+                  }}
+                >
+                  <strong>You</strong>{" "}
+                  <ReactMarkdown>{item.parts}</ReactMarkdown>
+                </pre>
+              )}
+
+              {item.role === "model" && (
+                <p
+                  style={{
+                    fontFamily: "Roboto, sans-serif",
+                    maxWidth: "100%",
+                    textOverflow: "wrap",
+                  }}
+                >
+                  <strong>AI</strong>{" "}
+                  <ReactMarkdown>{item.parts}</ReactMarkdown>
+                </p>
+              )}
             </div>
           ))}
           {loading && (
             <>
               <div className="self-end mb-2 bg-blue-200 text-blue-900 p-3 rounded-lg max-w-[90%]">
-                <p>
-                  <p>
-                    <strong>You:</strong>{" "}
-                  </p>
-                  {input1}
-                </p>
+                <pre style={{ fontFamily: "sans-serif" }}>
+                  <strong>You:</strong> <ReactMarkdown>{input1}</ReactMarkdown>
+                </pre>
               </div>
               <Spinner
                 className="self-start"

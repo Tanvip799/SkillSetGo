@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const MentorDetail = () => {
@@ -7,6 +7,23 @@ const MentorDetail = () => {
   const [mentor, setMentor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleAssignMentor = async (e) => {
+    e.preventDefault();
+    const userId = JSON.parse(localStorage.getItem("user_creds"))._id
+    mentor.studentId = userId;
+    try {
+      const response = await axios.post(`http://127.0.0.1:5000/assign_mentor`, {       
+        mentorDetails: mentor,
+      });
+      if (response.status === 200) {
+        navigate("/");
+      }
+    } catch (err) {
+      alert("Error assigning mentor");
+    }
+  };
 
   useEffect(() => {
     const fetchMentor = async () => {
@@ -81,14 +98,14 @@ const MentorDetail = () => {
         </div>
         <div className="col-span-2">
           <div className="flex items-center">
-            <h2 className="text-3xl font-bold text-black">{mentor.name}</h2>
+            <h2 className="text-2xl 2xl:text-3xl font-bold text-black">{mentor.name}</h2>
             <span className="ml-2 text-gray-500">New York, NY</span>
           </div>
-          <p className="text-lg text-gray-600">
+          <p className="text-md 2xl:text-lg text-gray-600">
             {mentor.current_position} at {mentor.current_employer}
           </p>
           <div className="flex items-center mt-2">
-            <span className="text-xl font-bold text-black">
+            <span className="text-lg 2xl:text-xl font-bold text-black">
               {mentor.average_rating}
             </span>
             <span className="text-2xl ml-2 text-gray-500">
@@ -96,29 +113,26 @@ const MentorDetail = () => {
             </span>
           </div>
           <div className="flex mt-4 space-x-4">
-            <button className="text-purple1 border border-purple1 px-4 py-2 rounded-full">
+            <button onClick={e=>handleAssignMentor(e)} className="text-white bg-purple1 px-4 py-2 rounded-full hover:bg-purple-900 transition-all">
               Book mentor
-            </button>
-            <button className="text-white bg-purple1 px-4 py-2 rounded-full">
-              Contact
             </button>
           </div>
           <hr className="my-8 border-t border-gray-300" />
           <div>
             <h3 className="text-xl font-bold text-black">Description</h3>
             <div className="mt-4">
-              <p className="text-lg text-gray-700">{mentor.description}</p>
+              <p className="text-md 2xl:text-lg text-gray-700">{mentor.description}</p>
             </div>
           </div>
           <hr className="my-8 border-t border-gray-300" />
           <div>
             <h3 className="text-xl font-bold text-black">Skills</h3>
-            <p className="text-lg text-gray-700 mt-2">{mentor.skills}</p>
+            <p className="text-md 2xl:text-lg text-gray-700 mt-2">{mentor.skills}</p>
           </div>
           <hr className="my-8 border-t border-gray-300" />
           <div>
             <h3 className="text-xl font-bold text-black">Expertise</h3>
-            <p className="text-lg text-gray-700 mt-2">
+            <p className="text-md 2xl:text-lg text-gray-700 mt-2">
               {mentor.field_of_expertise}
             </p>
           </div>

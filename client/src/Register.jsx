@@ -24,7 +24,11 @@ const Register = () => {
       });
       setMessage(response.data.message);
       if (response.data.message == 'User registered successfully') {
-        navigate('/login');
+        const loginResponse = await axios.get(`http://127.0.0.1:5000/login/${email}/${password}`);
+        if (loginResponse.data.message === "User logged in successfully") {
+          localStorage.setItem("user_creds", JSON.stringify(loginResponse.data.creds));
+          navigate('/questions');
+        }
       }
     } catch (error) {
       setMessage("Registration failed. Please try again.");

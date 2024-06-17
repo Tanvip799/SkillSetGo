@@ -9,11 +9,15 @@ import About from './components/About.jsx'
 import {divider, NextUIProvider} from '@nextui-org/react'
 import Chatbot from './components/Chatbot.jsx'
 import CalendarComponent from './components/Calendar.jsx'
-import Mentorship from './components/mentorship.jsx'
 import Register from './Register.jsx'
 import Login from './Login.jsx'
 import CommunityList from './components/CommunityList.jsx'
+import ForumPage from './components/ForumPage.jsx' 
+import DoubtPage from './components/DoubtPage.jsx'
+import ReplyPage from './components/ReplyPage.jsx'
 import MentorDetail from './components/MentorDetails.jsx'
+import Mentorship from './components/mentorship.jsx'
+import Questions from './components/Questions.jsx'
 
 
 const router = createBrowserRouter(
@@ -21,13 +25,24 @@ const router = createBrowserRouter(
     <>
     <Route path='/login' element={<Login/>}/> 
     <Route path='/register' element={<Register/>}/>
+    <Route path='/questions' element={<Questions/>}/>
     <Route path='/' element={<Layout/>}>
       <Route path='' element={<Home/>}/>
       <Route path='chatbot' element={<Chatbot/>}/>
       <Route path='calendar' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><CalendarComponent/></div>}/>
       <Route path='mentorship' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><Mentorship/></div>}/>
       <Route path='mentorship/:id' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><MentorDetail/></div>}/>
-      <Route path='forum' element={<CommunityList/>}/>
+      <Route path='forum'>
+          <Route index element={<CommunityList />} />
+          <Route path=':communityId'>
+            <Route index element={<ForumPage />} />
+            <Route path=':doubtId'>
+              <Route index element={<DoubtPage />} />
+              <Route path=':replyId' element={<ReplyPage />} />
+            </Route>
+          </Route>
+        </Route>
+      <Route path='test' element={<ForumPage/>}/>
     </Route>
     </>
   )
