@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 import tick from "../assets/tick.png";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { Rings } from "react-loader-spinner"; 
 const mentorReasons = [
   "Expertise in the field",
   "Proven track record of success",
@@ -33,8 +35,9 @@ const MentorRecommendations = () => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:5000/mentorship");
+        const response = await axios.get("http://localhost:5000/mentorship");
         const parsedData = JSON.parse(response.data);
+        console.log(parsedData);
         setMentors(parsedData);
       } catch (err) {
         setError("Error fetching mentor recommendations");
@@ -67,7 +70,13 @@ const MentorRecommendations = () => {
     setCurrentIndex((prevIndex) => Math.min(mentors.length - 4, prevIndex + 4));
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Rings height="80" width="80" color="#123abc" ariaLabel="loading" />
+      </div>
+    );
+  }
   if (error) return <p>{error}</p>;
 
   return (
@@ -87,7 +96,7 @@ const MentorRecommendations = () => {
             {mentorReasons.map((reason, index) => (
               <li key={index} className="flex items-center">
                 <img src={tick} alt="tick" className="w-5 h-5 mr-3" />
-                <span className="text-lg  text-black">{reason}</span>
+                <span className="text-lg text-black">{reason}</span>
               </li>
             ))}
           </ul>
@@ -109,37 +118,59 @@ const MentorRecommendations = () => {
       {/* Mentor Recommendations Section */}
       <h2 className="text-2xl font-bold my-8 mx-10"></h2>
       <div className="relative">
-        {/* Mentor Cards and Navigation Buttons */}
-        <div className="grid grid-cols-3 gap-5 2xl:grid-cols-4 2xl:gap-3">
-          {/* Mentor Cards */}
-          {mentors.slice(currentIndex, currentIndex + 4).map((mentor, index) => (
-            <div key={index} className="bg-white border rounded-lg shadow-md w-full">
-              <img
-                src='https://cdn-9.motorsport.com/images/mgl/63vnZMbY/s8/carlos-sainz-ferrari.jpg'
-                alt={mentor.name}
-                className="w-full h-40 object-cover rounded-t-lg"
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold text-gray-900">{mentor.name}</h3>
-                <p className="text-gray-600 text-md">{mentor.current_position}</p>
-                <p className="text-gray-500">{mentor.current_employer}</p>
-                <hr className="my-4 border-gray-300" />
-                <p className="text-gray-600">Work Experience: {mentor.work_experience}</p>
-                <p className="text-gray-600">{mentor.field_of_expertise}</p>
-                <div className="flex items-center mt-2">
-                  <p className="text-gray-700 font-bold text-md">{mentor.average_rating}</p>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -50, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto"
+          >
+            {mentors
+              .slice(currentIndex, currentIndex + 4)
+              .map((mentor, index) => (
+                <div key={index} className="bg-white border rounded-lg shadow-md">
+                  <img
+                    src="https://www.shutterstock.com/image-photo/head-shot-handsome-millennial-30s-600nw-1854710668.jpg"
+                    alt={mentor.name}
+                    className="w-full h-40 object-cover rounded-t-lg"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold text-gray-900">
+                      {mentor.name}
+                    </h3>
+                    <p className="text-gray-600 text-md">
+                      {mentor.current_position}
+                    </p>
+                    <p className="text-gray-500">{mentor.current_employer}</p>
+                    <hr className="my-4 border-gray-300" />
+                    <p className="text-gray-600">
+                      Work Experience: {mentor.work_experience}
+                    </p>
+                    <p className="text-gray-600">{mentor.field_of_expertise}</p>
+                    <div className="flex items-center mt-2">
+                      <p className="text-gray-700 font-bold text-md">
+                        {mentor.average_rating}
+                      </p>
+                    </div>
+                    <div className="flex items-center mt-2 gap-8">
+                      {renderStars(mentor.average_rating)}
+                      <Link to={`/mentorship/${mentor.id}`}>
+                        <button className="ml-auto bg-purple1 text-white py-1 px-3 rounded">
+                          Read more
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center mt-2">
-                  {renderStars(mentor.average_rating)}
-                  <button className="ml-auto bg-purple1 text-white py-1 px-3 rounded">Read more</button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              ))}
+          </motion.div>
+        </AnimatePresence>
+
         {/* Navigation Buttons */}
         <button
-          className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500"
+          className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500 mr-10"
           onClick={handlePrevious}
         >
           <svg
@@ -158,7 +189,7 @@ const MentorRecommendations = () => {
           </svg>
         </button>
         <button
-          className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500"
+          className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border rounded-full p-1 shadow-md text-gray-500 ml-10"
           onClick={handleNext}
         >
           <svg
@@ -180,5 +211,6 @@ const MentorRecommendations = () => {
     </div>
   );
 };
+
 
 export default MentorRecommendations;

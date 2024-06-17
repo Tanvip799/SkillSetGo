@@ -33,7 +33,7 @@ def preprocess_data_students(df, skills_column, aimed_column):
 
 def load_data():
     students = pd.read_csv('students.csv')
-    mentors = pd.read_csv('mentors_with_id.csv')
+    mentors = pd.read_csv('extended_mentors.csv')
 
     students.reset_index(inplace=True)
     students.rename(columns={'index': 'id'}, inplace=True)
@@ -218,20 +218,16 @@ def create_reply():
 
 @app.route('/mentorship',methods=['GET'])
 def mentor():
-    student_id = 12
-    # Load data
+    student_id = 68
     students, mentors = load_data()
-    # Calculate cosine similarities
     cosine_similarities = calculate_similarity_matrices(students, mentors)
-    # Recommend mentors for the given student ID
     recommended_mentors = recommend_mentors_for_student(student_id, students, mentors, cosine_similarities)
-    # Convert recommended mentors to JSON format
     recommended_mentors_json = recommended_mentors.to_json(orient='records')
 
     return jsonify(recommended_mentors_json)
 
-mentors_df = pd.read_csv('mentors_with_id.csv')
-@app.route('/mentors/<int:mentor_id>')
+mentors_df = pd.read_csv('extended_mentors.csv')
+@app.route('/mentorship/<int:mentor_id>')
 def get_mentor(mentor_id):
     mentor = mentors_df[mentors_df['id'] == mentor_id].to_dict(orient='records')
     print(mentor)
@@ -253,7 +249,7 @@ def chatbot():
     response = chat_session.send_message(prefix+msg)
     text = response.text
     return text
-mentors_df = pd.read_csv('mentors_with_id.csv')
+
 
 
 if __name__ == '__main__':
