@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.secret_key = 'sk'
 CORS(app)
 
-connection_string = 'mongodb+srv://shriharimahabal2:NObO44F5chwSglW7@cluster0.c0f3mdd.mongodb.net/'
+connection_string = 'mongodb://localhost:27017'
 client = MongoClient(connection_string)
 db = client.get_database('ssg')
 

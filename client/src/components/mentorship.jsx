@@ -69,7 +69,13 @@ const MentorRecommendations = () => {
     setCurrentIndex((prevIndex) => Math.min(mentors.length - 4, prevIndex + 4));
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Rings height="80" width="80" color="#123abc" ariaLabel="loading" />
+      </div>
+    );
+  }
   if (error) return <p>{error}</p>;
 
   return (
