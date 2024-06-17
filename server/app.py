@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 import google.generativeai as genai
-import pprint
+from flask_socketio import SocketIO, emit
 import pandas as pd
 from bson.objectid import ObjectId
 from bson.json_util import dumps
@@ -9,10 +9,12 @@ from bson.json_util import loads
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit, join_room, leave_room
 
 app = Flask(__name__)
 app.secret_key = 'sk'
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*") 
 
 connection_string = 'mongodb+srv://shriharimahabal2:NObO44F5chwSglW7@cluster0.c0f3mdd.mongodb.net/'
 client = MongoClient(connection_string)
@@ -33,7 +35,7 @@ def preprocess_data_students(df, skills_column, aimed_column):
 
 def load_data():
     students = pd.read_csv('students.csv')
-    mentors = pd.read_csv('mentors_with_id.csv')
+    mentors = pd.read_csv('extended_mentors.csv')
 
     students.reset_index(inplace=True)
     students.rename(columns={'index': 'id'}, inplace=True)
@@ -100,6 +102,16 @@ def login(email, password):
         }), 200
     return jsonify({'message': 'Invalid credentials'}), 403
 
+@app.route('/inset_user_data', methods=['POST'])
+def insert_user_data():
+    data = request.json
+    userId = data['userId']
+    userData = db.userData
+    userData.insert_one(data)
+    return jsonify({
+        'message': 'User data inserted successfully'
+    }), 200
+
 @app.route('/community_list/<string:userId>', methods=['GET'])
 def get_community(userId):
     communities = db.communities
@@ -140,15 +152,15 @@ def join_community():
 @app.route('/create_doubt', methods=['POST'])
 def create_doubt():
     data = request.json
-    communityId = data['communityId']
     comment = {
-        'communityId': communityId,
-        'comment': data['comment'],
-        'commentorId': data['commentor'],
+        'communityId': data['communityId'],
+        'commentHeading': data['commentHeading'],
+        'commentContent': data['commentContent'],
+        'commentorId': data['commentorId'],
         'likes': 0,
-        'dislikes': 0,
+        'likedBy': [],
         'parentId': None,
-        'isReply': False
+        'reply': None
     }
     comments = db.comments
     comments.insert_one(comment)
@@ -156,82 +168,144 @@ def create_doubt():
         'message': 'Comment created successfully'
     }), 200
 
-@app.route('/get_doubts/<string:community_id>', methods=['GET'])
-def get_doubts(community_id):
+@app.route('/get_doubts/<string:community_id>/<string:user_id>', methods=['GET'])
+def get_doubts(community_id, user_id):
     comments = db.comments
-    doubts = list(comments.find({'_id': ObjectId(community_id), 'parent': None}))
+    users = db.users
+    communities = db.communities
+    communityData = communities.find_one({'_id': ObjectId(community_id)})
+    communityData['_id'] = str(communityData['_id'])
+    doubts = list(comments.find({'communityId': community_id, 'parentId': None}))
+    commentors = []
+    isLiked = []
     for doubt in doubts:
         doubt['_id'] = str(doubt['_id'])
+        commentor = users.find_one({'_id': ObjectId(doubt['commentorId'])})
+        if user_id in doubt['likedBy']:
+            isLiked.append(True)
+        else:
+            isLiked.append(False)
+        commentors.append(commentor['username'])
     if doubts:
-        return jsonify({'doubts': doubts}), 200
-    return jsonify({'message': 'No doubts found'}), 404
+        return jsonify({'doubts': doubts, 'commentors': commentors, 'isLiked': isLiked, 'communityData': communityData}), 200
+    return jsonify({'message': 'No doubts found', 'communityData': communityData, 'doubts': []})
+
+@app.route('/like_doubt', methods=['POST'])
+def like_doubt():
+    data = request.json
+    comments = db.comments
+    userId = data['userId']
+    comment = comments.find_one({'_id': ObjectId(data['commentId'])})
+    if data['like'] == True:
+        comments.update_one({'_id': ObjectId(data['commentId'])}, {"$set": {'likes': comment['likes'] + 1}, "$addToSet": {'likedBy': userId}})
+    else:
+        comments.update_one({'_id': ObjectId(data['commentId'])}, {"$set": {'likes': comment['likes'] - 1}, "$pull": {'likedBy': userId}})
+    return jsonify({
+        'message': 'Like updated successfully'
+    }), 200
 
 @app.route('/answer_doubt', methods=['POST'])
 def answer_doubt():
     data = request.json
+    reply = data['reply']
     comment = {
-        'communityId': ObjectId(data['communityId']),
-        'comment': data['comment'],
-        'commentorId': data['commentor'],
+        'communityId': data['communityId'],
+        'commentHeading': data['commentHeading'],
+        'commentContent': data['commentContent'],
+        'commentorId': data['commentorId'],
         'likes': 0,
-        'dislikes': 0,
+        'likedBy': [],
         'parentId': data['parentId'],
-        'isReply': False
+        'reply': reply
     }
     comments = db.comments
     comments.insert_one(comment)
+    socketio.emit('new_reply', {'comment': comment}, room=data['parentId'])
     return jsonify({
         'message': 'Comment created successfully'
     }), 200
 
-@app.route('/get_responses/<string:comment_id>', methods=['GET'])
-def get_responses(comment_id):
-    comments = db.comments
-    responses = comments.find({'parentId': ObjectId(comment_id)})
-    for response in responses:
-        response['_id'] = str(response['_id'])
-    if responses:
-        return jsonify({'responses': responses}), 200
-    return jsonify({'message': 'No responses found'}), 404
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+    # Handle connection logic if needed
 
-@app.route('/create_reply', methods=['POST'])
-def create_reply():
-    data = request.json
-    comment = {
-        'communityId': ObjectId(data['communityId']),
-        'comment': data['comment'],
-        'commentorId': data['commentor'],
-        'likes': 0,
-        'dislikes': 0,
-        'parentId': ObjectId(data['parentId']),
-        'isReply': True
-    }
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+    # Handle disconnection logic if needed
+
+
+@app.route('/get_responses/<string:comment_id>/<string:user_id>', methods=['GET'])
+def get_responses(comment_id, user_id):
     comments = db.comments
-    comments.insert_one(comment)
-    return jsonify({
-        'message': 'Comment created successfully'
-    }), 200
+    users = db.users
     
-# @app.route('/get_replies/<string:comment_id>', methods=['GET'])
-# def get_replies(comment_id):
-#     data = request.json
+    responses = list(comments.find({'parentId': comment_id}))
+    parentComment = comments.find_one({'_id': ObjectId(comment_id)})
+    parentComment['_id'] = str(parentComment['_id'])
+    
+    doubtAsker = users.find_one({'_id': ObjectId(parentComment['commentorId'])})
+    doubtAsker = doubtAsker['username']
+    
+    if responses:
+        responses.sort(key=lambda x: x['likes'], reverse=True)
+        commentors = []
+        isLiked = []
+        repliedTo = []
+        
+        for response in responses:
+            if response['reply']:
+                repliedTo.append(users.find_one({'_id': ObjectId(response['reply'])})['username'])
+                
+            response['_id'] = str(response['_id'])
+            commentor = users.find_one({'_id': ObjectId(response['commentorId'])})
+            commentors.append(commentor['username'])
+            
+            if user_id in response.get('likedBy', []):
+                isLiked.append(True)
+            else:
+                isLiked.append(False)
+        
+        return jsonify({
+            'responses': responses,
+            'commentors': commentors,
+            'isLiked': isLiked,
+            'parentComment': parentComment,
+            'doubtAsker': doubtAsker,
+            'repliedTo': repliedTo  # Include repliedTo here
+        }), 200
+    
+    # If there are no responses
+    return jsonify({
+        'message': 'No responses found',
+        'responses': [],
+        'doubtAsker': doubtAsker,
+        'parentComment': parentComment,
+        'repliedTo': []  # Ensure repliedTo is initialized as an empty list
+    }), 200
+
+@app.route('/delete_comment/<string:comment_id>/', methods=['DELETE'])
+def delete_comment(comment_id):
+    comments = db.comments
+    comments.delete_one({'_id': ObjectId(comment_id)})
+    comments.delete_many({'parentId': comment_id})
+    return jsonify({
+        'message': 'Comment deleted successfully'
+    }), 200
 
 @app.route('/mentorship',methods=['GET'])
 def mentor():
-    student_id = 12
-    # Load data
+    student_id = 455
     students, mentors = load_data()
-    # Calculate cosine similarities
     cosine_similarities = calculate_similarity_matrices(students, mentors)
-    # Recommend mentors for the given student ID
     recommended_mentors = recommend_mentors_for_student(student_id, students, mentors, cosine_similarities)
-    # Convert recommended mentors to JSON format
     recommended_mentors_json = recommended_mentors.to_json(orient='records')
 
     return jsonify(recommended_mentors_json)
 
-mentors_df = pd.read_csv('mentors_with_id.csv')
-@app.route('/mentors/<int:mentor_id>')
+mentors_df = pd.read_csv('extended_mentors.csv')
+@app.route('/mentorship/<int:mentor_id>')
 def get_mentor(mentor_id):
     mentor = mentors_df[mentors_df['id'] == mentor_id].to_dict(orient='records')
     print(mentor)
@@ -253,8 +327,22 @@ def chatbot():
     response = chat_session.send_message(prefix+msg)
     text = response.text
     return text
-mentors_df = pd.read_csv('mentors_with_id.csv')
 
+@app.route('/get_todo_list/<string:user_id>',methods = ['GET'])
+def get_todo(user_id):
+    todos = db.todos
+    todoList = list(todos.find({'userId':user_id}))
+    print(todoList)
+    for todo in todoList:
+        todo["_id"]=str(todo["_id"])
+    return jsonify({"todoList": todoList})   
+
+@app.route('/add_todo',methods = ['POST'])
+def add_todo():
+    data = request.json
+    todos = db.todos
+    todos.insert_one(data)
+    return jsonify({"message":"Todo added successfully"})
 
 if __name__ == '__main__':
     app.run(debug=True)

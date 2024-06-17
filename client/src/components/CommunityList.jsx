@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "@nextui-org/react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -14,8 +15,8 @@ import {
   useDisclosure,
   Textarea,
 } from "@nextui-org/react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CommunityList() {
   const [memberCommunities, setMemberCommunities] = useState([]);
@@ -26,6 +27,7 @@ function CommunityList() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCommunityList();
@@ -49,6 +51,9 @@ function CommunityList() {
   };
 
   const handleCreateCommunity = async () => {
+    if (!title || !description) {
+      return toast.error("Please fill in all the fields!");
+    }
     const adminData = localStorage.getItem("user_creds");
     const adminData1 = JSON.parse(adminData);
     const admin = adminData1._id;
@@ -61,7 +66,7 @@ function CommunityList() {
         memberIds: [admin],
       }
     );
-    if(response.data.message == "Community created successfully"){
+    if (response.data.message == "Community created successfully") {
       await fetchCommunityList();
       toast.success("Community created successfully!");
     }
@@ -99,7 +104,7 @@ function CommunityList() {
           <Card
             isFooterBlurred
             key={index}
-            className="font-mont w-full h-[19rem] p-5 bg-gradient-to-r from-purple1 to-cyan-900 flex flex-col justify-between"
+            className="transition-all font-mont w-full h-[19rem] p-5 bg-gradient-to-r from-purple1 to-cyan-900 flex flex-col justify-between hover:shadow-xl transform hover:scale-105"
           >
             <CardHeader className="flex-col items-start space-y-1">
               <h4 className="text-white font-bold text-xl">
@@ -113,9 +118,12 @@ function CommunityList() {
               <div className="text-gray-50 max-h-[5rem] w-full text-sm text-wrap truncate">
                 {community.communityDescription}
               </div>
-              <Link className="bg-gray-200 flex justify-center items-center cursor-pointer rounded-full w-[40%] self-center text-sm text-black font-bold px-1 py-1">
+              <div
+                onClick={() => navigate(`/forum/${community._id}`)}
+                className="bg-gray-200 flex justify-center items-center cursor-pointer rounded-full w-[40%] self-center text-sm text-black font-bold px-1 py-1 transition-all transform hover:scale-105"
+              >
                 Visit
-              </Link>
+              </div>
             </CardFooter>
           </Card>
         ))}
@@ -128,7 +136,7 @@ function CommunityList() {
           <Card
             isFooterBlurred
             key={index}
-            className="font-mont w-full h-[19rem] p-5 bg-gradient-to-r from-purple1 to-cyan-900 flex flex-col justify-between"
+            className="transition-all font-mont w-full h-[19rem] p-5 bg-gradient-to-r from-purple1 to-cyan-900 flex flex-col justify-between hover:shadow-xl transform hover:scale-105"
           >
             <CardHeader className="flex-col items-start space-y-1">
               <h4 className="text-white font-bold text-xl">
@@ -144,7 +152,7 @@ function CommunityList() {
               </div>
               <button
                 onClick={() => handleJoinCommunity(index)}
-                className="bg-gray-200 hover:bg-gray-300 flex justify-center items-center cursor-pointer rounded-full w-[40%] self-center text-sm text-black font-bold px-1 py-1"
+                className="bg-gray-200 hover:bg-gray-300 flex justify-center items-center cursor-pointer rounded-full w-[40%] self-center text-sm text-black font-bold px-1 py-1 transition-all transform hover:scale-105"
               >
                 Join
               </button>
@@ -154,12 +162,17 @@ function CommunityList() {
       </div>
       <Button
         color="default"
-        className="fixed shadow-xl text-slate-900 border border-gray-400 bottom-5 right-5 font-mont text-md font-semibold rounded-full"
+        className="fixed shadow-xl text-slate-900 border border-gray-400 bottom-5 right-5 font-mont text-md font-semibold rounded-full transition-all transform hover:scale-105"
         onPress={onOpen}
       >
         + Create Community
       </Button>
-      <Modal className="font-mont" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        backdrop="blur"
+        className="font-mont"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <>
@@ -180,7 +193,7 @@ function CommunityList() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Enter Community Title"
-                    className="mt-1 block w-full py-2 px-3 border-2 bg-white border-gray-200 rounded-xl shadow-sm focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
+                    className="mt-1 block w-full py-2 px-3 border-2 bg-white border-gray-200 rounded-xl shadow-sm hover:border-gray-400 focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                     required
                   />
                 </div>
@@ -196,7 +209,7 @@ function CommunityList() {
                     minRows={2}
                     maxRows={3}
                     variant="bordered"
-                    className="mt-1 block w-full bg-white rounded-md shadow-sm sm:text-sm"
+                    className="mt-1 block w-full bg-white rounded-xl sm:text-sm"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     type="text"
@@ -221,11 +234,9 @@ function CommunityList() {
           )}
         </ModalContent>
       </Modal>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }
 
 export default CommunityList;
-
-//from-[#FFD3A5] to-[#FF974A]

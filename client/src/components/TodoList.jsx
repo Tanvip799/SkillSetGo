@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Trash from "../assets/trash.png";
 
 const ToDoList = () => {
   const [tasks, setTasks] = useState({
-    academics: ["CCN ISE 2", "DAA Lab 10"],
-    extraCurriculum: ["Python Tutorial", "Learn OpenCV"],
-    others: ["Buy birthday gift", "Call aunt"],
+    academics: [],
+    extraCurriculum: [],
+    others: [],
   });
 
   const [newTask, setNewTask] = useState({
@@ -14,13 +15,47 @@ const ToDoList = () => {
     others: "",
   });
 
-  const handleAddTask = (category) => {
-    if (newTask[category]) {
-      setTasks({
-        ...tasks,
-        [category]: [...tasks[category], newTask[category]],
+  useEffect(() => {
+    const adminData = localStorage.getItem("user_creds");
+    const adminData1 = JSON.parse(adminData);
+    const admin = adminData1._id;
+
+    axios.get(`http://127.0.0.1:5000/get_todo_list/${admin}`)
+      .then(response => {
+        const todoList = response.data.todoList;
+        const updatedTasks = { academics: [], extraCurriculum: [], others: [] };
+        todoList.forEach(item => {
+          updatedTasks[item.category].push(item.text);
+        });
+        setTasks(updatedTasks);
+      })
+      .catch(error => {
+        console.error("Error fetching todo list:", error);
       });
-      setNewTask({ ...newTask, [category]: "" });
+  }, []);
+
+  const handleAddTask = (category) => {
+    const adminData = localStorage.getItem("user_creds");
+    const adminData1 = JSON.parse(adminData);
+    const admin = adminData1._id;
+
+    if (newTask[category]) {
+      const task = newTask[category];
+      axios.post("http://127.0.0.1:5000/add_todo", {
+        userId: admin,
+        text: task,
+        category: category
+      })
+      .then(response => {
+        setTasks({
+          ...tasks,
+          [category]: [...tasks[category], task],
+        });
+        setNewTask({ ...newTask, [category]: "" });
+      })
+      .catch(error => {
+        console.error("Error adding task:", error);
+      });
     }
   };
 
