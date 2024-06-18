@@ -23,10 +23,10 @@ export const EmblaCarousel = () => {
             </Chip>
           </Link>
         </div>
-        <div className="courses h-[19rem] flex justify-between space-x-5 items-center">
+        <div className="courses h-[19rem] flex justify-between space-x-4 items-center">
           <Link
             to=""
-            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
+            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-gray-50 hover:scale-105 transition-all"
           >
             <img
               src={ReactLogo}
@@ -42,7 +42,7 @@ export const EmblaCarousel = () => {
 
           <Link
             to=""
-            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
+            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-gray-50 hover:scale-105 transition-all"
           >
             <img
               src={mlLogo}
