@@ -1,9 +1,11 @@
-import React from 'react'
-import { useEffect } from 'react'
+import React from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { EmblaCarousel } from './EmblaCarousel'
-import TodoList from './TodoList'
-import PomodoroTimer from './PomodoroTimer'
+import { EmblaCarousel } from "./CoursesTwo";
+import { Tooltip } from "@nextui-org/react";
+import Road from "../assets/road.png";
+import Roadmap from "./Roadmap";
+import Stats from "./Stats";
 // import { useAuth } from '../AuthContext';
 
 function Home() {
@@ -18,28 +20,28 @@ function Home() {
   //   }
   // }, [isAuthenticated]);
 
+
   useEffect(() => {
-    const token = localStorage.getItem('user_creds');
+    const token = localStorage.getItem("user_creds");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
   }, []);
 
   return (
     <div className="min-h-screen w-[80%] ml-[20%] p-5 bg-gray-100">
-      <div className="w-[100%] grid grid-rows-2 grid-cols-3 gap-x-5 gap-y-6">
-        <div className="col-span-2 row-span-1">
+      <div className="w-[100%] flex space-x-4">
+        <div className="w-[66%]">
           <EmblaCarousel />
         </div>
-        <div className="col-span-1 row-span-2">
-          <TodoList />
-        </div>
-        <div className='col-span-1 row-span-1'>
-          <PomodoroTimer />
+        <div className="w-[34%]">
+          <Stats />
         </div>
       </div>
+      <h1 className="text-purple1 font-bold text-xl mt-10 font-mont">Your Roadmap</h1>
+      <Roadmap/>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

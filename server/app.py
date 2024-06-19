@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 import google.generativeai as genai
-from flask_socketio import SocketIO, emit
 import pandas as pd
 from bson.objectid import ObjectId
 from bson.json_util import dumps
@@ -15,7 +14,7 @@ app = Flask(__name__)
 app.secret_key = 'sk'
 CORS(app)
 
-connection_string = 'mongodb://localhost:27017/'
+connection_string = 'mongodb+srv://shriharimahabal2:NObO44F5chwSglW7@cluster0.c0f3mdd.mongodb.net/'
 client = MongoClient(connection_string)
 db = client.get_database('ssg')
 
@@ -327,7 +326,7 @@ def chatbot():
     text = response.text
     return text
 
-@app.route('/get_roadmap', methods=['POST'])
+@app.route('/make_roadmap', methods=['POST'])
 def get_roadmap():
     data = request.json
     roadmaps = db.roadmaps
@@ -421,7 +420,8 @@ def get_roadmap_data(user_id):
     roadmaps = db.roadmaps
     roadmap = roadmaps.find_one({'userId': user_id})
     if roadmap:
-        return jsonify({'roadmap': roadmap['roadmap']}), 200
+        roadmap['_id'] = str(roadmap['_id'])
+        return jsonify(roadmap), 200
     return jsonify({'message': 'No roadmap found'}), 404
 
 @app.route('/get_todo_list/<string:user_id>',methods = ['GET'])

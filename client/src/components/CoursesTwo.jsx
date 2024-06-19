@@ -1,9 +1,8 @@
 import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Progress } from "@nextui-org/react";
-import ReactLogo from "../assets/react-logo.jpg";
-import mlLogo from "../assets/ml-logo.png";
-import { Chip } from "@nextui-org/react";
+import { Progress, Chip } from "@nextui-org/react";
+import Study1 from "../assets/study1.png";
+import Study2 from "../assets/study2.jpg";
 
 export const EmblaCarousel = () => {
   return (
@@ -14,46 +13,42 @@ export const EmblaCarousel = () => {
             Courses
           </h1>
           <Link to="/courses">
-            <Chip
-              size="sm"
-              variant="flat"
-              color="secondary"
-            >
+            <Chip size="sm" variant="flat" color="secondary">
               View All
             </Chip>
           </Link>
         </div>
-        <div className="courses h-[19rem] flex justify-between space-x-5 items-center">
+        <div className="courses h-[19rem] flex justify-between space-x-4 items-center">
           <Link
             to=""
-            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
+            className="p-3 w-1/2 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-gray-50 hover:scale-105 transition-all"
           >
             <img
-              src={ReactLogo}
-              className="object-cover h-[12rem] rounded-lg"
+              src={Study1}
+              className="object-cover w-full h-[12rem] rounded-lg"
               alt=""
             />
             <p className="font-semibold font-mont text-lg text-black">
               React Complete Course
             </p>
             <p className="text-black">Progress:</p>
-            <Progress color="default" aria-label="Loading..." value={60} />
+            <Progress classNames={{indicator: "bg-gradient-to-r from-purple1 to-purple-900"}} aria-label="Loading..." value={60} />
           </Link>
 
           <Link
             to=""
-            className="p-3 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-slate-100"
+            className="p-3 w-1/2 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-gray-50 hover:scale-105 transition-all"
           >
             <img
-              src={mlLogo}
-              className="object-cover h-[12rem] rounded-lg"
+              src={Study2}
+              className="object-cover w-full h-[12rem] rounded-lg"
               alt=""
             />
             <p className="font-semibold font-mont text-lg text-black">
               Machine Learning Course
             </p>
             <p className="text-black">Progress:</p>
-            <Progress color="warning" aria-label="Loading..." value={20} />
+            <Progress classNames={{indicator: "bg-gradient-to-r from-sky-500 to-sky-300"}} aria-label="Loading..." value={20} />
           </Link>
         </div>
       </div>

@@ -79,7 +79,7 @@ const MentorRecommendations = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="w-full max-w-6xl mx-auto bg-white p-6 py-0">
+    <div className="w-full max-w-6xl mx-auto bg-white p-6 py-0 2xl:font-pop">
       <div className="grid grid-cols-3 gap-8">
         {/* First Column */}
         <div className="col-span-1">

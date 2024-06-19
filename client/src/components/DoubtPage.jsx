@@ -232,7 +232,7 @@ function DoubtPage() {
                     ? handleRemoveLike(event, index)
                     : handleLike(event, index)
                 }
-                className="likeBtn h-7 w-7 p-1 flex justify-center items-center rounded-xl hover:bg-gray-400"
+                className="likeBtn h-8 w-8 p-1 flex justify-center items-center rounded-xl hover:bg-gray-400"
               >
                 {isLiked[index] ? (
                   <img src={ThumbsUp} alt="Liked" className="h-5 w-5" />

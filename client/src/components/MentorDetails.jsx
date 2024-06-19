@@ -61,7 +61,7 @@ const MentorDetail = () => {
   if (!mentor) return <p>Mentor not found</p>;
 
   return (
-    <div className="max-w-5xl mx-10 my-6 p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-5xl mx-10 my-6 p-6 bg-white shadow-lg rounded-lg font-pop">
       <div className="grid grid-cols-3 gap-6">
         <div className="col-span-1">
           <img

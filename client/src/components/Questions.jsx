@@ -52,7 +52,7 @@ function Questions() {
     }
 
     const response = await axios.post(
-      "http://127.0.0.1:5000/get_roadmap",
+      "http://127.0.0.1:5000/make_roadmap",
       {
         userId: JSON.parse(localStorage.getItem("user_creds"))._id,
         currentYear: questions.currentYear,
@@ -73,8 +73,6 @@ function Questions() {
         prefStudyTimeTo: prefStudyTimeTo.toString(),
       }
     );
-    console.log(response.data.response);
-    console.log(typeof response.data.response);
   };
 
   return (

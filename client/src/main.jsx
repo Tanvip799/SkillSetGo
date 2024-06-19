@@ -19,8 +19,7 @@ import MentorDetail from './components/MentorDetails.jsx'
 import Mentorship from './components/mentorship.jsx'
 import Questions from './components/Questions.jsx'
 import Roadmap from './components/Roadmap.jsx'
-import Account from './components/Account.jsx'
-
+import StudyRoom from './components/StudyRoom.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +32,7 @@ const router = createBrowserRouter(
       <Route path='chatbot' element={<Chatbot/>}/>
       <Route path='calendar' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><CalendarComponent/></div>}/>
       <Route path='roadmap' element={<Roadmap/>}/>
+      <Route path='studyroom' element={<StudyRoom/>}/>
       <Route path='mentorship' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><Mentorship/></div>}/>
       <Route path='mentorship/:id' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><MentorDetail/></div>}/>
       <Route path='mentorship' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><Mentorship/></div>}/>
