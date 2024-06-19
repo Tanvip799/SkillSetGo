@@ -39,19 +39,7 @@ function Nav() {
           </NavLink>
 
           <NavLink
-            to="/roadmap"
-            className={({ isActive }) =>
-              `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
-                isActive ? "bg-gray-700" : "hover:bg-gray-700"
-              }`
-            }
-          >
-            <img className="h-5" src={Map} alt="" />
-            <p className="text-sm font-pop">Roadmap</p>
-          </NavLink>
-
-          <NavLink
-            to="/courses"
+            to="/studyroom"
             className={({ isActive }) =>
               `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
@@ -59,7 +47,7 @@ function Nav() {
             }
           >
             <img className="h-5" src={Book} alt="" />
-            <p className="text-sm font-pop">Courses</p>
+            <p className="text-sm font-pop">Study Room</p>
           </NavLink>
 
           <NavLink

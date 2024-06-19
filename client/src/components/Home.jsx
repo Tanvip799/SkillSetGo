@@ -5,6 +5,7 @@ import { EmblaCarousel } from "./CoursesTwo";
 import { Tooltip } from "@nextui-org/react";
 import Road from "../assets/road.png";
 import Roadmap from "./Roadmap";
+import Stats from "./Stats";
 // import { useAuth } from '../AuthContext';
 
 function Home() {
@@ -30,16 +31,11 @@ function Home() {
   return (
     <div className="min-h-screen w-[80%] ml-[20%] p-5 bg-gray-100">
       <div className="w-[100%] flex space-x-4">
-        <div className="w-[65%]">
+        <div className="w-[66%]">
           <EmblaCarousel />
         </div>
-        <div className="">
-          <h1 className="text-purple1 font-bold text-xl mb-1 font-mont">
-            Your Stats
-          </h1>
-          <div className="p-3 bg-white shadow-lg rounded-lg flex flex-col justify-between items-center h-[19rem]">
-            
-          </div>
+        <div className="w-[34%]">
+          <Stats />
         </div>
       </div>
       <h1 className="text-purple1 font-bold text-xl mt-10 font-mont">Your Roadmap</h1>
