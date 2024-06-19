@@ -19,6 +19,7 @@ import MentorDetail from './components/MentorDetails.jsx'
 import Mentorship from './components/mentorship.jsx'
 import Questions from './components/Questions.jsx'
 import Roadmap from './components/Roadmap.jsx'
+import Account from './components/Account.jsx'
 
 
 const router = createBrowserRouter(
@@ -34,6 +35,9 @@ const router = createBrowserRouter(
       <Route path='roadmap' element={<Roadmap/>}/>
       <Route path='mentorship' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><Mentorship/></div>}/>
       <Route path='mentorship/:id' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><MentorDetail/></div>}/>
+      <Route path='mentorship' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"white"}}><Mentorship/></div>}/>
+      <Route path='account' element={<div style={{height: "100vh", width:"80%", marginLeft:"20%", padding:"1.25rem", background:"#"}}><Account/></div>}/>
+
       <Route path='forum'>
           <Route index element={<CommunityList />} />
           <Route path=':communityId'>
