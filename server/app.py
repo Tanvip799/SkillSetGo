@@ -454,5 +454,17 @@ def add_todo():
     todos.insert_one(data)
     return jsonify({"message":"Todo added successfully"})
 
+@app.route('/account/<string:user_id>',methods = ['GET'])
+def account_info(user_id):
+    accountInfo=db.userData
+    account = accountInfo.find_one({'userId': user_id})
+    if account:
+        print(account)
+        account['_id'] = str(account['_id'])
+        return jsonify({'Account': account}), 200
+    
+    return jsonify({'message': 'No acount data found'}), 404
+
+
 if __name__ == '__main__':
     app.run(debug=True)
