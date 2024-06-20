@@ -71,6 +71,7 @@ function Questions() {
         studyFrequency: studyFrequency[0],
         prefStudyTimeFrom: prefStudyTimeFrom.toString(),
         prefStudyTimeTo: prefStudyTimeTo.toString(),
+        currentDate: new Date().toString(),
       }
     );
     console.log(response.data.message);

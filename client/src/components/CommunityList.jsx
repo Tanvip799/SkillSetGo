@@ -131,7 +131,7 @@ function CommunityList() {
       <h1 className="text-purple1 font-bold text-xl mb-1 font-mont mt-10">
         Explore Communities
       </h1>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-3 gap-5 2xl:grid-cols-4 2xl:gap-3">
         {communityList.map((community, index) => (
           <Card
             isFooterBlurred

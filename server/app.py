@@ -336,6 +336,7 @@ def get_roadmap():
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
     )
+    current_date = data['currentDate']
     chat_session = model.start_chat(history=[])
     prompt = f"""
         User Inputs:
@@ -357,14 +358,21 @@ def get_roadmap():
         Frequency of Study Sessions: {data['studyFrequency']}
         Length of Each Study Session: {data['studyDuration']}
         Roadmap Design Structure:
+        Roadmap Design Structure:
         This roadmap is for an Indian student studying in an Indian engineering college. The roadmap generated should also take into consideration the other inputs provided by the user. Say, for example, the user has entered Finance as their preferred industry; then there should be a module dedicated to the application of the job role in that industry and how the learned modules are important in that field. Another example would be if the user entered their career aspirations as MNC, then the Interview prep module should be according to the interview setting of an MNC. Similarly, other input parameters of the user should also be considered.
         
         Next, the entered description of their previous experience should be analyzed, and all the topics that the user already knows but are to be included in the roadmap should be given less emphasis on, and the allotted time should be adjusted accordingly. It is crucial that every module will end with a project which would be a real-life application of all the subtopics covered in the entire module. It is also important that the last milestone/module of the roadmap would be the interview prep module, which would include important interview questions subtopics and everything relevant to the interview prep for the desired job role according to the Indian job placement environment.
         
         Now, each module will be designated a time, like it could be one week or two weeks, and this should be based on the subtopics in the module. It should take into account the frequency of the study sessions and the length of each study session entered by the user and then accordingly calculate a suitable time in weeks for each module. The last important thing is that the roadmap's total time should be such that it aligns with the campus placement time. It should be completed before the month of campus placement and should provide the user enough time to prepare for their placement. The time assigned to each module should be such that the total aligns with the time of campus placement starting from the day of the roadmap generation.
         
+        The next thing is that for each subtopic you have to provide a detailed description for each subtopic which should contain details about what the subtopic should cover, all tech stack involved and its scope. The next thing is that for each subtopic provide links to relevant resources on the internet which cover the entire subtopic and all the relevant technologies and you should double check to ensure that all the links you provide are correctly working (sources for example can be various documentations, geeksforgeeks, tutorialspoint, scaler, programiz, etc. Don’t include links from medium.com and freecodecamp.com)
+        
+        The most important thing to take into account is that the roadmap should cover all the relevant tech stack and technologies for a given desired job role even if the user has done projects on a particular technology which is a part of that job role you should also include other relevant technologies in that domain. Say for example for a backend developer job role, the user has done a project on flask that does not mean that the whole roadmap should be flask based, it should also other technologies relevant to backend development like node and express.js. Similarly, for the other job roles relevant technologies should be added to the roadmap
+        
+        The current date is {current_date} so take into account this and the placement date and make the roadmap over this period which means the user has a lot of time so make the roadmap so that a variety of topics are covered
+        
         JSON Format:
-        The output should strictly be in JSON format(no additional text required) with the following structure, ensuring consistency across all outputs:
+        The output should be a JSON object with the following structure, ensuring consistency across all outputs:
         
         {{
           "roadmap": [
@@ -373,11 +381,15 @@ def get_roadmap():
               "subtopics": [
                 {{
                   "subtopic": "Subtopic1",
-                  "difficulty_level": 1-10
+                  "difficulty_level": 1-10,
+                  "description": "Detailed description and scope of the subtopic",
+                  "links": ["link1", "link2"...]
                 }},
                 {{
                   "subtopic": "Subtopic2",
                   "difficulty_level": 1-10
+                  "description": "Detailed description and scope of the subtopic",
+                  "links": ["link1", "link2"...]
                 }}
                 ...
               ],
@@ -395,6 +407,8 @@ def get_roadmap():
         Take into account the user's previous experience and knowledge, giving less emphasis on topics the user is already familiar with.
         Align the total duration of the roadmap with the time of campus placement, ensuring the user is fully prepared by the start of the placement season.
         Another important thing to take care of is that the projects that you provide at the end of each module should not be generic like build a simple app or build a simple website etc. Instead, give the user a specific project like analyze the given dataset and train so-and-so model, build a calculator app with a UI description that you will give, or a proper case study of a company for EDA and model development etc.
+        I want you to ensure and check before you give me any links as a majority of the previous links that you provided were not working. This should strictly not happen because this will cause major issue in the learning. Keep in mind that you give functioning and proper links only
+        
         Your task is to generate a personalized roadmap for the user based on the provided inputs. The roadmap structure and modules should be according to the given roadmap structure design. The final output should be in the given JSON format and should only contain the JSON object and nothing else.
     """
     
