@@ -73,6 +73,7 @@ function Questions() {
         prefStudyTimeTo: prefStudyTimeTo.toString(),
       }
     );
+    console.log(response.data.message);
   };
 
   return (

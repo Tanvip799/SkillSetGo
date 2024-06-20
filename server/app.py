@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.secret_key = 'sk'
 CORS(app)
 
-connection_string = 'mongodb+srv://shriharimahabal2:NObO44F5chwSglW7@cluster0.c0f3mdd.mongodb.net/'
+connection_string = 'mongodb://localhost:27017/'
 client = MongoClient(connection_string)
 db = client.get_database('ssg')
 
@@ -411,9 +411,9 @@ def get_roadmap():
         
         return jsonify({'response': roadmap_json, 'message': 'Roadmap generated and stored successfully'}), 200
     except json.JSONDecodeError:
-        return jsonify({'error': 'Failed to decode JSON from response'}), 500
+        return jsonify({'message': 'Failed to decode JSON from response'}), 500
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'message': str(e)}), 500
     
 @app.route('/get_roadmap/<string:user_id>', methods=['GET'])
 def get_roadmap_data(user_id):

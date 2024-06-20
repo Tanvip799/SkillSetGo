@@ -20,7 +20,7 @@ import Mentorship from './components/mentorship.jsx'
 import Questions from './components/Questions.jsx'
 import Roadmap from './components/Roadmap.jsx'
 import StudyRoom from './components/StudyRoom.jsx'
-
+import Account from './components/Account.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
