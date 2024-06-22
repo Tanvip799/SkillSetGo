@@ -9,6 +9,9 @@ import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from flask_cors import CORS
+import math
+from datetime import datetime, timedelta
+
 
 app = Flask(__name__)
 app.secret_key = 'sk'
@@ -18,45 +21,31 @@ connection_string = 'mongodb://localhost:27017/'
 client = MongoClient(connection_string)
 db = client.get_database('ssg')
 
-def preprocess_data_mentors(df, skills_column, role_column, aimed_column):
-    df[skills_column] = df[skills_column].fillna('').str.lower()
-    df[skills_column] = df[skills_column].apply(lambda x: ' '.join(x.split(', ')))
+def preprocess_data_mentors(df, role_column):
     df[role_column] = df[role_column].fillna('').str.lower().str.replace(' ', '_')
-    df[aimed_column] = df[aimed_column].fillna('').str.lower().str.replace(' ', '_')
-    return df
-
-def preprocess_data_students(df, skills_column, aimed_column):
-    df[skills_column] = df[skills_column].fillna('').str.lower()
-    df[skills_column] = df[skills_column].apply(lambda x: ' '.join(x.split(', ')))
-    df[aimed_column] = df[aimed_column].fillna('').str.lower().str.replace(' ', '_')
     return df
 
 def load_data():
-    students = pd.read_csv('students.csv')
     mentors = pd.read_csv('extended_mentors.csv')
-
-    students.reset_index(inplace=True)
-    students.rename(columns={'index': 'id'}, inplace=True)
-
-    students = preprocess_data_students(students, 'current_skills','aimed_career_role')
-    mentors = preprocess_data_mentors(mentors, 'skills', 'current_position', 'field_of_expertise')
-
-    students['combined_features'] = students['current_skills'] + ' '  + students['aimed_career_role']
-    mentors['combined_features'] = mentors['skills'] + ' ' + mentors['current_position'] + ' ' + mentors['field_of_expertise']
+    mentors = preprocess_data_mentors(mentors, 'current_position')
     
-    return students, mentors
+    # Combine relevant columns into 'combined_features'
+    mentors['combined_features'] = mentors['current_position'] + ' ' + mentors['field_of_expertise']
+    
+    return mentors
 
-def calculate_similarity_matrices(students, mentors):
+def calculate_similarity_matrices(student_aimed_career_role, mentors):
     tfidf_vectorizer = TfidfVectorizer()
-    student_features_matrix = tfidf_vectorizer.fit_transform(students['combined_features'])
-    mentor_features_matrix = tfidf_vectorizer.transform(mentors['combined_features'])
+    mentor_features_matrix = tfidf_vectorizer.fit_transform(mentors['combined_features'])
+
+    student_features = [student_aimed_career_role]
+    student_features_matrix = tfidf_vectorizer.transform(student_features)
 
     cosine_similarities = linear_kernel(student_features_matrix, mentor_features_matrix)
     return cosine_similarities
 
-def recommend_mentors_for_student(student_id, students, mentors, cosine_similarities, top_n=8):
-    student_index = students[students['id'] == student_id].index[0]
-    similarity_scores = list(enumerate(cosine_similarities[student_index]))
+def recommend_mentors_for_student(student_aimed_career_role, mentors, cosine_similarities, top_n=8):
+    similarity_scores = list(enumerate(cosine_similarities[0]))
     similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
     top_mentor_indices = [i[0] for i in similarity_scores[:top_n]]
     return mentors.iloc[top_mentor_indices]
@@ -284,14 +273,18 @@ def delete_comment(comment_id):
         'message': 'Comment deleted successfully'
     }), 200
 
-@app.route('/mentorship',methods=['GET'])
-def mentor():
-    student_id = 455
-    students, mentors = load_data()
-    cosine_similarities = calculate_similarity_matrices(students, mentors)
-    recommended_mentors = recommend_mentors_for_student(student_id, students, mentors, cosine_similarities)
-    recommended_mentors_json = recommended_mentors.to_json(orient='records')
-
+@app.route('/mentorship/<string:user_id>',methods=['GET'])
+def mentor(user_id):
+    accountInfo=db.userData
+    account = accountInfo.find_one({'userId': user_id})
+    if account:
+        print(account['jobRole'])
+    student_aimed_career_role = account['jobRole']
+    mentors = load_data()
+    cosine_similarities = calculate_similarity_matrices(student_aimed_career_role, mentors)
+    recommended_mentors = recommend_mentors_for_student(student_aimed_career_role, mentors, cosine_similarities)
+    recommended_mentors_json = recommended_mentors.to_dict('records')
+    print(recommended_mentors_json)
     return jsonify(recommended_mentors_json)
 
 mentors_df = pd.read_csv('extended_mentors.csv')
