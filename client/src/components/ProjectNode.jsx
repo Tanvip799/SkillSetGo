@@ -24,6 +24,8 @@ const ProjectNode = ({ data }) => {
         <Handle type="target" position="right" style={{ background: "#555" }} />
       </div>
       <Modal
+        className="font-pop"
+        size="lg"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}

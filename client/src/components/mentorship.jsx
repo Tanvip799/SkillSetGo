@@ -34,10 +34,12 @@ const MentorRecommendations = () => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/mentorship");
-        const parsedData = JSON.parse(response.data);
-        console.log(parsedData);
-        setMentors(parsedData);
+        const adminData = localStorage.getItem("user_creds");
+        const adminData1 = JSON.parse(adminData);
+        const admin = adminData1._id;
+        console.log("hi");
+        const response = await axios.get(`http://localhost:5000/mentorship/${admin}`);
+        setMentors(response.data);
       } catch (err) {
         setError("Error fetching mentor recommendations");
       } finally {
