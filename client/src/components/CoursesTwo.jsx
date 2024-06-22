@@ -18,7 +18,7 @@ export const EmblaCarousel = () => {
             </Chip>
           </Link>
         </div>
-        <div className="courses h-[19rem] flex justify-between space-x-4 items-center">
+        <div className="courses h-[20rem] flex justify-between space-x-6 items-center">
           <Link
             to=""
             className="p-3 w-1/2 bg-white shadow-lg rounded-lg h-[100%] flex flex-col items-start justify-between hover:bg-gray-50 hover:scale-105 transition-all"

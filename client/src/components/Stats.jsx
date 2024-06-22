@@ -9,7 +9,7 @@ function Stats() {
         Your Rating
       </h1>
 
-      <div className="p-3 bg-white shadow-lg rounded-lg flex flex-col justify-between h-[19rem]">
+      <div className="p-3 bg-white shadow-lg rounded-lg flex flex-col justify-between h-[20rem]">
         <div className="h-[60%] flex items-center justify-between">
           <div className="flex flex-col w-full items-center justify-between">
             <h1 className="font-mont text-sm font-semibold">Learner's</h1>

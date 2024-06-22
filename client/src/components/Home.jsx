@@ -30,7 +30,7 @@ function Home() {
 
   return (
     <div className="min-h-screen w-[80%] ml-[20%] p-5 bg-gray-100">
-      <div className="w-[100%] flex space-x-4">
+      <div className="w-[100%] flex space-x-6">
         <div className="w-[66%]">
           <EmblaCarousel />
         </div>
