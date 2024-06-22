@@ -70,11 +70,11 @@ function Roadmap() {
       case 0:
         return "top-[15.5rem] left-[4rem] 2xl:top-[18.0rem] 2xl: left-[4.6rem]";
       case 1:
-        return "top-[8.6rem] left-[15.5rem] 2xl:top-[9.6rem] 2xl: left-[18.8rem]";
+        return "top-[8.6rem] left-[15.9rem] 2xl:top-[9.6rem] 2xl: left-[18.8rem]";
       case 2:
-        return "top-[3rem] left-[28.2rem] 2xl:top-[2.6rem] 2xl: left-[34.3rem]";
+        return "top-[1rem] left-[24rem] 2xl:top-[2.6rem] 2xl: left-[34.3rem]";
       case 3:
-        return "bottom-[12.5rem] left-[32rem] 2xl: bottom-[15.3rem] 2xl: left-[38.7rem]";
+        return "bottom-[12.5rem] left-[31.9rem] 2xl: bottom-[12.8rem] 2xl: left-[38.7rem]";
       case 4:
         return "top-[8rem] right-[9rem] 2xl:top-[9.0rem] 2xl: right-[10.0rem]";
       default:
@@ -91,7 +91,7 @@ function Roadmap() {
         <div className="embla__container">
           {roadmap.map((window, index) => (
             <div className="embla__slide overflow-hidden relative 2xl:pb-5" key={index}>
-              <img className="ml-4 2xl:ml-[7.2rem] scale-150 2xl:scale-[1.51] 2xl:my-8" src={Road} alt="road" />
+              <img className="ml-4 2xl:ml-[7.2rem] scale-[1.25] 2xl:scale-[1.51] 2xl:my-8" src={Road} alt="road" />
               {window.map((course, idx) => (
                 <>
                   <Tooltip

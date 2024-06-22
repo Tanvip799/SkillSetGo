@@ -24,7 +24,7 @@ app.secret_key = 'sk'
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-connection_string = 'mongodb://localhost:27017/'
+connection_string = 'mongodb+srv://shriharimahabal2:NObO44F5chwSglW7@cluster0.c0f3mdd.mongodb.net/'
 client = MongoClient(connection_string)
 db = client.get_database('ssg')
 
@@ -638,8 +638,26 @@ def complete_subtopic():
     moduleId = data['moduleId']
     subtopicIndex = data['subtopicIndex']
     length = data['length']
-    videos.update_one({'_id': ObjectId(moduleId)}, {"$set": {f'isCompleted.{subtopicIndex}': True}})
-    
+    val = 1 / float(length)
+    videos.update_one({'_id': ObjectId(moduleId)}, {
+        "$set": {f'isCompleted.{subtopicIndex}': True},
+        "$inc": {'progress': val}
+    })
+    return jsonify({'message': 'Subtopic completed successfully'}), 200
+
+@app.route('/not_complete_subtopic', methods=['POST'])
+def not_complete_subtopic():
+    data = request.json
+    videos = db.videos
+    moduleId = data['moduleId']
+    subtopicIndex = data['subtopicIndex']
+    length = data['length']
+    val = 1 / float(length)
+    videos.update_one({'_id': ObjectId(moduleId)}, {
+        "$set": {f'isCompleted.{subtopicIndex}': False},
+        "$inc": {'progress': -val}
+    })
+    return jsonify({'message': 'Subtopic not completed successfully'}), 200
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
