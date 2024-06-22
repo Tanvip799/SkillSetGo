@@ -61,7 +61,7 @@ function Courses() {
                     indicator: "bg-gradient-to-r from-purple1 to-purple-900",
                   }}
                   aria-label="Loading..."
-                  value={70}
+                  value={video.progress * 100}
                 />
               </Link>
             ))}

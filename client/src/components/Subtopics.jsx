@@ -9,8 +9,8 @@ function Subtopics() {
   const { moduleId } = useParams();
   const [module, setModule] = useState({});
   const [subtopics, setSubtopics] = useState([]);
-  const [links, setLinks] = useState([]);
   const admin = JSON.parse(localStorage.getItem("user_creds"))._id;
+  const [completed, setCompleted] = useState([]);
 
   useEffect(() => {
     fetchSubtopics();
@@ -24,7 +24,7 @@ function Subtopics() {
       console.log(response.data.subtopics);
       setModule(response.data.subtopics);
       setSubtopics(response.data.subtopics.subtopics);
-      setLinks(response.data.subtopics.video_data);
+      setCompleted(response.data.subtopics.isCompleted);
     } catch (error) {
       console.error(error);
     }
@@ -41,16 +41,47 @@ function Subtopics() {
           length: subtopics.length,
         }
       );
+      console.log(response.data.message);
+      // Update the local state
+      const newCompleted = [...completed];
+      newCompleted[index] = true;
+      setCompleted(newCompleted);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const handleUnTick = async (index) => {
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:5000/not_complete_subtopic`,
+        {
+          moduleId: moduleId,
+          admin: admin,
+          subtopicIndex: index,
+          length: subtopics.length,
+        }
+      );
+      console.log(response.data.message);
+      // Update the local state
+      const newCompleted = [...completed];
+      newCompleted[index] = false;
+      setCompleted(newCompleted);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChange = (index) => {
+    if (completed[index]) {
+      handleUnTick(index);
+    } else {
+      handleTick(index);
+    }
+  };
+
   return (
     <div className="min-h-screen w-[80%] ml-[20%] p-5 bg-gray-100">
-      {/* <h1 className="text-purple1 font-bold text-2xl font-mont">
-        Module Videos
-      </h1> */}
       <div className="flex flex-col">
         <div className="overflow-hidden w-full rounded-xl h-[8rem] bg-gradient-to-r from-purple1 to-gray-500 relative font-pop">
           <h1 className="text-4xl text-gray-500 tracking-wider font-bold translate-x-10 translate-y-[3.2rem]">
@@ -85,7 +116,8 @@ function Subtopics() {
               </div>
             </div>
             <Checkbox
-              onClick={() => handleTick(index)}
+              isSelected={completed[index]}
+              onChange={() => handleChange(index)}
               className="mr-2"
               size="lg"
               color="default"

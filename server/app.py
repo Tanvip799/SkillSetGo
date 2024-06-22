@@ -28,7 +28,7 @@ app.secret_key = 'sk'
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-connection_string = 'mongodb://localhost:27017/'
+connection_string = 'mongodb+srv://shriharimahabal2:NObO44F5chwSglW7@cluster0.c0f3mdd.mongodb.net/'
 client = MongoClient(connection_string)
 db = client.get_database('ssg')
 
@@ -479,6 +479,189 @@ def account_info(user_id):
     
     return jsonify({'message': 'No acount data found'}), 404
 
+#videos part
+api_key = "AIzaSyADMU6l1-W3zUyS2NkTlZeppiPJ8A82zJ0"
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-pro",
+    generation_config=generation_config,
+)
+
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--ignore-certificate-errors')
+
+driver = webdriver.Chrome(options=options)
+
+def check_query(module, subtopic):
+    prompt = f"""
+    {subtopic} is a subtopic of the course {module}. Will searching just the subtopic name through youtube yield an appropriate result or should I add the course name to the subtopic in the search. Give me a yes or no answer only. 0 is no 1 is yes
+    """
+    flag = model.generate_content(prompt)
+    return int(flag.text)
+
+def retrieve_videos(search_query):
+    driver.get("https://www.youtube.com")
+
+    search_box = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, 'input#search'))
+    )
+    print("Search box is present in the DOM.")
+
+    search_box.send_keys(search_query)
+    print("Sent keys to the search box.")
+
+    search_box.submit()
+    print("Submitted the search form.")
+
+    sleep(3)
+
+    videos = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'a#video-title'))
+    )
+    print("Video elements are present in the DOM.")
+
+    print(len(videos))
+
+    video_links = [video.get_attribute('href') for video in videos]
+
+    return video_links
+
+def get_video_id(youtube_url):
+    # Extract video ID from URL
+    video_id = re.search(r"(?<=v=)[^&]+", youtube_url)
+    if not video_id:
+        video_id = re.search(r"(?<=be/)[^&]+", youtube_url)
+    return video_id.group(0) if video_id else None
+
+def get_video_duration(api_key, video_id):
+    # Make the API request to get video details
+    url = f"https://www.googleapis.com/youtube/v3/videos?id={video_id}&part=contentDetails&key={api_key}"
+    response = requests.get(url).json()
+    duration = response['items'][0]['contentDetails']['duration']
+    # Parse the ISO 8601 duration
+    return parse_duration(duration)
+
+def parse_duration(duration):
+    # Parse the ISO 8601 duration to a timedelta object
+    match = re.match(r'PT((?P<hours>\d+)H)?((?P<minutes>\d+)M)?((?P<seconds>\d+)S)?', duration)
+    if not match:
+        return None
+    parts = match.groupdict()
+    time_params = {name: int(param) for name, param in parts.items() if param}
+    return timedelta(**time_params)
+
+@app.route('/get_video', methods=['POST'])
+def main():
+    data = request.json
+    module = data['module']
+    subtopics = data['subtopics']
+    video_data = []
+    for subtopic in subtopics:
+        flag = check_query(module, subtopic)
+        if flag == 0:
+            video_links = retrieve_videos(module + subtopic)
+        else:
+            video_links = retrieve_videos(subtopic)
+
+        suitable_video = None
+        longest_video = None
+        longest_duration = timedelta(0)
+
+        for video_link in video_links:
+            video_id = get_video_id(video_link)
+            if video_id:
+                duration = get_video_duration(api_key, video_id)
+                if duration:
+                    if duration > timedelta(minutes=50):
+                        suitable_video = (module, subtopic, video_link, str(duration))
+                        break
+                    if duration > longest_duration:
+                        longest_video = (module, subtopic, video_link, str(duration))
+                        longest_duration = duration
+
+        if suitable_video:
+            video_data.append(suitable_video)
+        elif longest_video:
+            video_data.append(longest_video)
+        else:
+            return jsonify({'message': 'No suitable video found'}), 404
+        
+    isCompleted = []
+    for i in subtopics:
+        isCompleted.append(False)
+    videos = db.videos
+    videos.insert_one({'userId': data['userId'], 'module': module, 'subtopics': subtopics, 'video_data': video_data, 'isCompleted': isCompleted, 'progress': 0})
+    return jsonify({'message': 'Videos retrieved and stored successfully'}), 200
+
+@app.route('/fetch_modules/<string:user_id>', methods=['GET'])
+def fetch_videos(user_id):
+    videos = db.videos
+    videoData = list(videos.find({'userId': user_id}))
+    if videoData:
+        for video in videoData:
+            video['_id'] = str(video['_id'])
+        return jsonify({'videos': videoData}), 200
+    return jsonify({'message': 'No video data found'}), 404
+
+@app.route('/get_subtopics/<string:moduleId>/<string:userId>', methods=['GET'])
+def get_subtopics(moduleId, userId):
+    videos = db.videos
+    subtopics = videos.find_one({'_id': ObjectId(moduleId)})
+    if subtopics:
+        subtopics['_id'] = str(subtopics['_id'])
+        return jsonify({'subtopics': subtopics}), 200
+    return jsonify({'message': 'No subtopic found'}), 404
+
+@app.route('/get_vids/<string:moduleId>/<string:userId>/<string:subtopicIndex>', methods=['GET'])
+def get_vids(moduleId, userId, subtopicIndex):
+    videos = db.videos
+    moduleName = videos.find_one({'_id': ObjectId(moduleId)})['module']
+    roadmaps = db.roadmaps
+    rm = roadmaps.find_one({'userId': userId})
+    modules = rm['roadmap']['roadmap']
+    moduleMain1 = None
+    for i in modules:
+        if i['module'] == moduleName:
+            moduleMain1 = i
+            break
+    moduleMain = moduleMain1['subtopics'][int(subtopicIndex)]
+    subtopics = videos.find_one({'_id': ObjectId(moduleId)})
+    if subtopics:
+        subtopics['_id'] = str(subtopics['_id'])
+        return jsonify({'subtopics': subtopics, 'moduleMain': moduleMain}), 200
+    return jsonify({'message': 'No subtopic found'}), 404
+
+
+@app.route('/complete_subtopic', methods=['POST'])
+def complete_subtopic():
+    data = request.json
+    videos = db.videos
+    moduleId = data['moduleId']
+    subtopicIndex = data['subtopicIndex']
+    length = data['length']
+    val = 1 / float(length)
+    videos.update_one({'_id': ObjectId(moduleId)}, {
+        "$set": {f'isCompleted.{subtopicIndex}': True},
+        "$inc": {'progress': val}
+    })
+    return jsonify({'message': 'Subtopic completed successfully'}), 200
+
+@app.route('/not_complete_subtopic', methods=['POST'])
+def not_complete_subtopic():
+    data = request.json
+    videos = db.videos
+    moduleId = data['moduleId']
+    subtopicIndex = data['subtopicIndex']
+    length = data['length']
+    val = 1 / float(length)
+    videos.update_one({'_id': ObjectId(moduleId)}, {
+        "$set": {f'isCompleted.{subtopicIndex}': False},
+        "$inc": {'progress': -val}
+    })
+    return jsonify({'message': 'Subtopic not completed successfully'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
