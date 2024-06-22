@@ -65,7 +65,8 @@ const RoadmapMain = () => {
           data: { 
             label: subtopic.subtopic, 
             description: subtopic.description,
-            links: subtopic.links
+            links: subtopic.links,
+            moduelName: module.module
           },
           position: { x: xPos, y: yPos },
           type: "module",
@@ -106,7 +107,7 @@ const RoadmapMain = () => {
           targetHandle: "left",
           animated: true,
           type: 'smoothstep',
-          style: { stroke: "#1f2937", strokeWidth: 5, strokeDasharray: "0,0" },
+          style: { stroke: "#1f2937", strokeWidth: 4, strokeDasharray: "0,0" },
         });
       }
 
@@ -120,7 +121,7 @@ const RoadmapMain = () => {
           sourceHandle: "right",
           animated: true,
           type: 'smoothstep',
-          style: { stroke: "#1f2937", strokeWidth: 5, strokeDasharray: "0,0" },
+          style: { stroke: "#1f2937", strokeWidth: 4, strokeDasharray: "0,0" },
         });
       }
 
@@ -143,7 +144,11 @@ const RoadmapMain = () => {
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
+        zoomOnScroll={false}
+        panOnScroll={false}
         fitViewOptions={{ padding: 0.2 }}
+        minZoom={0.5}
+        maxZoom={0.8}
       >
         {/* <MiniMap 
           nodeColor={(node) => {

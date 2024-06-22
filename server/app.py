@@ -9,13 +9,24 @@ import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from flask_cors import CORS
+
 import math
 from datetime import datetime, timedelta
 
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from time import sleep
+import re
+import requests
+from datetime import timedelta
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.secret_key = 'sk'
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 connection_string = 'mongodb://localhost:27017/'
 client = MongoClient(connection_string)
@@ -305,6 +316,17 @@ def assign_mentor():
     return jsonify({
         'message': 'Mentor assigned successfully'
     }), 200
+    
+@app.route('/get_mentor/<string:userId>', methods=['GET'])
+def get_mentor_data(userId):
+    mentors = db.mentors
+    users = db.users
+    mentor = mentors.find_one({'studentId': userId})
+    username = users.find_one({'_id': ObjectId(userId)})['username']
+    if mentor:
+        mentor['_id'] = str(mentor['_id'])
+        return jsonify({'mentor': mentor, 'username': username}), 200
+    return jsonify({'message': 'No mentor found'})
 
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
@@ -348,7 +370,6 @@ def get_roadmap():
         Projects: {data['projects']}
         Time of Campus Placement: {data['placementTime']}
         Brief Description of Previous Experience and Knowledge: {data['prevExperience']}
-        Frequency of Study Sessions: {data['studyFrequency']}
         Length of Each Study Session: {data['studyDuration']}
         Roadmap Design Structure:
         Roadmap Design Structure:

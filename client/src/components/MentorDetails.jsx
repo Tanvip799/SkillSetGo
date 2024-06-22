@@ -11,14 +11,14 @@ const MentorDetail = () => {
 
   const handleAssignMentor = async (e) => {
     e.preventDefault();
-    const userId = JSON.parse(localStorage.getItem("user_creds"))._id
+    const userId = JSON.parse(localStorage.getItem("user_creds"))._id;
     mentor.studentId = userId;
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/assign_mentor`, {       
+      const response = await axios.post(`http://127.0.0.1:5000/assign_mentor`, {
         mentorDetails: mentor,
       });
       if (response.status === 200) {
-        navigate("/");
+        navigate("/mentor");
       }
     } catch (err) {
       alert("Error assigning mentor");
@@ -98,7 +98,9 @@ const MentorDetail = () => {
         </div>
         <div className="col-span-2">
           <div className="flex items-center">
-            <h2 className="text-2xl 2xl:text-3xl font-bold text-black">{mentor.name}</h2>
+            <h2 className="text-2xl 2xl:text-3xl font-bold text-black">
+              {mentor.name}
+            </h2>
             <span className="ml-2 text-gray-500">New York, NY</span>
           </div>
           <p className="text-md 2xl:text-lg text-gray-600">
@@ -113,7 +115,10 @@ const MentorDetail = () => {
             </span>
           </div>
           <div className="flex mt-4 space-x-4">
-            <button onClick={e=>handleAssignMentor(e)} className="text-white bg-purple1 px-4 py-2 rounded-full hover:bg-purple-900 transition-all">
+            <button
+              onClick={(e) => handleAssignMentor(e)}
+              className="text-white bg-purple1 px-4 py-2 rounded-full hover:bg-purple-900 transition-all"
+            >
               Book mentor
             </button>
           </div>
@@ -121,13 +126,17 @@ const MentorDetail = () => {
           <div>
             <h3 className="text-xl font-bold text-black">Description</h3>
             <div className="mt-4">
-              <p className="text-md 2xl:text-lg text-gray-700">{mentor.description}</p>
+              <p className="text-md 2xl:text-lg text-gray-700">
+                {mentor.description}
+              </p>
             </div>
           </div>
           <hr className="my-8 border-t border-gray-300" />
           <div>
             <h3 className="text-xl font-bold text-black">Skills</h3>
-            <p className="text-md 2xl:text-lg text-gray-700 mt-2">{mentor.skills}</p>
+            <p className="text-md 2xl:text-lg text-gray-700 mt-2">
+              {mentor.skills}
+            </p>
           </div>
           <hr className="my-8 border-t border-gray-300" />
           <div>

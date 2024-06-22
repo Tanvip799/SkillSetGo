@@ -8,6 +8,7 @@ import Dashboard from "../assets/circle-gauge.png";
 import User from "../assets/circle-user.png";
 import Forum from "../assets/users.png";
 import Map from "../assets/map.png";
+import Mentor from "../assets/mentor.png";
 
 function Nav() {
   return (
@@ -75,15 +76,15 @@ function Nav() {
           </NavLink>
 
           <NavLink
-            to="/mentorship"
+            to="/mentor"
             className={({ isActive }) =>
               `text-white flex space-x-4 pl-[4%] py-2 w-[75%] rounded-lg justify-start items-center transition duration-100 ${
                 isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
-            <img className="h-5" src={Calendar} alt="" />
-            <p className="text-sm font-pop">Mentorship</p>
+            <img className="h-5" src={Mentor} alt="" />
+            <p className="text-sm font-pop">Mentor</p>
           </NavLink>
 
           <NavLink

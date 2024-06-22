@@ -6,18 +6,13 @@ import { Tooltip } from "@nextui-org/react";
 const events = [
   {
     title: "Python Webscraping Workshop",
-    start: moment("2024-06-09T10:00:00").toDate(),
-    end: moment("2024-06-09T11:00:00").toDate(),
-  },
-  {
-    title: "React Workshop",
-    start: moment("2024-06-09T13:00:00").toDate(),
-    end: moment("2024-06-09T15:00:00").toDate(),
+    start: moment("2024-06-22T10:00:00").toDate(),
+    end: moment("2024-06-22T11:00:00").toDate(),
   },
   {
     title: "Machine Learning Workshop",
-    start: moment("2024-06-11T12:00:00").toDate(),
-    end: moment("2024-06-12T14:00:00").toDate(),
+    start: moment("2024-06-24T12:00:00").toDate(),
+    end: moment("2024-06-26T14:00:00").toDate(),
   },
 ];
 
@@ -74,7 +69,7 @@ export default function CalendarComponent() {
   return (
     <Calendar
       events={events}
-      defaultView={"week"}
+      defaultView={"month"}
       views={["month","week", "day"]}
       components={components}
     />
