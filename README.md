@@ -16,6 +16,8 @@ Welcome to the Career Roadmap Platform for Engineering Students! This project is
 ### 2. **Roadmap Tracking**
    - **Progress Tracking**: Monitor your advancement through the roadmap.
    - **Achievements**: Track completed milestones and achievements.
+   - ![image](https://github.com/user-attachments/assets/ec076b0a-241d-4037-8bc4-95e287871c5b)
+
 
 ### 3. **Ratings and Reviews**
    - **Course Ratings**: Rate and review courses and resources.
@@ -24,14 +26,20 @@ Welcome to the Career Roadmap Platform for Engineering Students! This project is
 ### 4. **Mentorship**
    - **Mentor Matching**: Connect with mentors based on career goals and interests.
    - **Mentorship Sessions**: Schedule and manage mentorship sessions.
+   - ![image](https://github.com/user-attachments/assets/064c701d-a604-42a5-8ce9-9a19a7292f57)
+
 
 ### 5. **Calendar Integration**
    - **Event Scheduling**: Integrate and manage events, deadlines, and important dates.
    - **Reminders**: Receive reminders for upcoming tasks and deadlines.
+   - ![image](https://github.com/user-attachments/assets/fd7a0e7f-b136-40be-b775-efe1aaa3b6d7)
+
 
 ### 6. **Integrated Courses**
    - **Course Sets**: Access curated technical course sets tailored to your roadmap.
    - **Resource Links**: Get links to relevant learning resources and materials.
+   - ![image](https://github.com/user-attachments/assets/5c2d8ac0-ef86-4883-a39f-c0c25984cb2e)
+
 
 - **Roadmap Generation**: The process of creating a personalized career plan based on individual inputs.
 - **Progress Tracking**: Monitoring and visualizing progress towards completing milestones.
