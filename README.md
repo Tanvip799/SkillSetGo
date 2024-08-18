@@ -10,6 +10,8 @@ Welcome to the Career Roadmap Platform for Engineering Students! This project is
 ### 1. **Roadmap Generation**
    - **Initial Quiz**: Start with a quiz to assess your interests and career goals.
    - **Customized Roadmap**: Generate a personalized career roadmap based on quiz results.
+   - ![image](https://github.com/user-attachments/assets/98475aee-b47d-448b-a9a5-25f5e0bc0a91)
+
 
 ### 2. **Roadmap Tracking**
    - **Progress Tracking**: Monitor your advancement through the roadmap.
