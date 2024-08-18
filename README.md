@@ -1,4 +1,3 @@
-Here’s a draft for your GitHub README:
 
 ---
 
@@ -32,31 +31,12 @@ Welcome to the Career Roadmap Platform for Engineering Students! This project is
    - **Course Sets**: Access curated technical course sets tailored to your roadmap.
    - **Resource Links**: Get links to relevant learning resources and materials.
 
-## Technical Terms
-
 - **Roadmap Generation**: The process of creating a personalized career plan based on individual inputs.
 - **Progress Tracking**: Monitoring and visualizing progress towards completing milestones.
 - **Mentorship**: Guidance and support provided by experienced professionals in the field.
 - **Calendar Integration**: Syncing and managing important dates and deadlines within the platform.
 - **Course Sets**: Curated collections of courses and resources relevant to specific career paths.
 
-## Installation and Setup
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/yourusername/career-roadmap-platform.git
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   cd career-roadmap-platform
-   npm install
-   ```
-
-3. **Run the Application**
-   ```bash
-   npm start
-   ```
 
 ## Contributing
 
