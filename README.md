@@ -32,7 +32,6 @@ Welcome to the Career Roadmap Platform for Engineering Students! This project is
 ### 5. **Calendar Integration**
    - **Event Scheduling**: Integrate and manage events, deadlines, and important dates.
    - **Reminders**: Receive reminders for upcoming tasks and deadlines.
-   - ![image](https://github.com/user-attachments/assets/fd7a0e7f-b136-40be-b775-efe1aaa3b6d7)
 
 
 ### 6. **Integrated Courses**
