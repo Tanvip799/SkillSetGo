@@ -21,7 +21,7 @@ Welcome to the Career Roadmap Platform for Engineering Students! This project is
 ### 3. **Calendar Integration**
    - **Automatic Scheduling** Courses and milestones from the roadmap are automatically scheduled into the calendar for efficient time management.
    - **Seamless Integration**:Sync your roadmap with your calendar to stay organized and on track.
-   - ![image](![image](https://github.com/user-attachments/assets/4bff8229-faa1-4cf4-aae9-490f7fd07f3b)
+   - ![image](https://github.com/user-attachments/assets/4bff8229-faa1-4cf4-aae9-490f7fd07f3b)
 )
 
 ### 3. **Ratings and Reviews**
