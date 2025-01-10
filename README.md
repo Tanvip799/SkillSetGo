@@ -23,23 +23,29 @@ Welcome to the Career Roadmap Platform for Engineering Students! This project is
    - **Seamless Integration**:Sync your roadmap with your calendar to stay organized and on track.
    - ![image](https://github.com/user-attachments/assets/e0c99c21-d8f7-43d1-bbc8-acdf797ca054)
 
+### 4. **Chatbot Integration**
+   - **Interactive Guidance**:The chatbot provides instant assistance for navigating the platform, finding resources, and answering FAQs.
+   - **24/7 Support**: Always available to help users with their queries or roadmap adjustments.
+   - ![image](https://github.com/user-attachments/assets/56c95bf6-43ef-4de2-8a17-311ce594b08d)
 
-### 3. **Ratings and Reviews**
+### 5. **Community Forum**
+   - **Collaborative Learning** : Engage with fellow users through discussions, sharing resources, and solving doubts.
+   - **Knowledge Sharing**: Post articles, tips, and experiences to contribute to the community’s growth.
+   - ![image](https://github.com/user-attachments/assets/28b786cd-9901-4291-a3f1-05ff17d69e40)
+   - ![image](https://github.com/user-attachments/assets/75172835-64ca-4fdf-8dda-c304bba387d1)
+
+
+### 6. **Ratings and Reviews**
    - **Course Ratings**: Rate and review courses and resources.
    - **Mentorship Feedback**: Provide feedback on mentorship experiences.
 
-### 4. **Mentorship**
+### 7. **Mentorship**
    - **Mentor Matching**: Connect with mentors based on career goals and interests.
    - **Mentorship Sessions**: Schedule and manage mentorship sessions.
    - ![image](https://github.com/user-attachments/assets/064c701d-a604-42a5-8ce9-9a19a7292f57)
 
 
-### 5. **Calendar Integration**
-   - **Event Scheduling**: Integrate and manage events, deadlines, and important dates.
-   - **Reminders**: Receive reminders for upcoming tasks and deadlines.
-
-
-### 6. **Integrated Courses**
+### 8. **Integrated Courses**
    - **Course Sets**: Access curated technical course sets tailored to your roadmap.
    - **Resource Links**: Get links to relevant learning resources and materials.
    - ![image](https://github.com/user-attachments/assets/5c2d8ac0-ef86-4883-a39f-c0c25984cb2e)
